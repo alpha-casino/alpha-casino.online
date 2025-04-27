@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Альфа Казино - Ігровий автомат</title>
+  <meta name="keywords" content="казино, заработок, быстрый заработок, заработок в интернете, быстро заработать на играх, игры, заработок, казино, казино, заробіток, швидкий заробіток, заробіток в інтернеті, швидко заробити на іграх, ігри, заробіток, казино">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: url('background.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+      overflow-x: hidden;
+    }
+    h1 { margin-top: 20px; font-size: 3em; }
+    .welcome-message {
+      font-size: 1.5em;
+      color: #ffffff;
+      margin-bottom: 20px;
+      animation: fadeIn 2s;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+    }
+    footer {
+      margin-top: 50px;
+      font-size: 1em;
+      color: #ffffff;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    #user-info { margin-top: 10px; font-size: 1.2em; color: #f39c12; }
+    .slot-machine {
+      margin: 30px auto;
+      width: 400px;
+      background: rgba(28,28,60,0.9);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(243,156,18,0.7);
+      position: relative;
+    }
+    .balance, .bet { margin: 15px 0; font-size: 1.5em; }
+    .slots {
+      font-size: 5em;
+      margin: 30px 0;
+      letter-spacing: 20px;
+      transition: transform 0.5s ease;
+    }
+    .spinning { animation: spin 0.5s linear infinite; }
+    @keyframes spin { from { transform: rotateX(0deg); } to { transform: rotateX(360deg); } }
+    button {
+      padding: 15px 30px;
+      font-size: 1.2em;
+      border: none;
+      border-radius: 10px;
+      background-color: #f39c12;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background-color: #e67e22;
+      box-shadow: 0 0 10px #f39c12;
+    }
+    .auth-buttons { margin-top: 20px; }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+    .modal-content {
+      background: #1c1c3c;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+    }
+    .modal-content img { margin-top: 10px; width: 200px; }
+    .close {
+      margin-top: 15px;
+      cursor: pointer;
+      color: #f39c12;
+      font-size: 1.2em;
+    }
+    .recharge-input { margin-top: 10px; }
+    .recharge-input input {
+      padding: 8px;
+      width: 200px;
+      font-size: 1em;
+      margin: 5px 0;
+    }
+    #confirmationMessage {
+      margin-top: 20px;
+      color: #4caf50;
+      font-size: 1.2em;
+      display: none;
+    }
+    /* Салют */
+    .firework {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 10px;
+      height: 10px;
+      background: #ff0;
+      border-radius: 50%;
+      animation: explode 0.8s ease-out forwards;
+      transform: translate(-50%, -50%);
+      opacity: 0.7;
+    }
+    @keyframes explode {
+      0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+      100% { transform: translate(-50%, -300px) scale(0.2); opacity: 0; }
+    }
+    @media (max-width: 600px) {
+      .slot-machine { width: 90%; padding: 20px; }
+      .slots { font-size: 3em; letter-spacing: 10px; }
+      button { padding: 12px 20px; font-size: 1em; }
+      .welcome-message { font-size: 1.2em; }
+      .modal-content { width: 90%; font-size: 1em; }
+      input { width: 90%; }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="welcome-message">Ласкаво просимо до Альфа Казино! Бажаємо великих виграшів!</div>
+
+<h1>Альфа Казино</h1>
+<div id="user-info"></div>
+
+<div class="slot-machine">
+  <div class="balance">Баланс: <span id="balance">500</span> грн</div>
+  <div class="bet">Ставка: <input type="number" id="betAmount" value="10" min="10" step="10"> грн</div>
+  <div class="slots" id="slots">🎰🎰🎰</div>
+  <button onclick="spin()" id="spinButton">Крутити</button>
+</div>
+
+<div class="auth-buttons" id="authButtons" style="display:none;">
+  <button onclick="recharge()">Поповнити баланс через USDT</button>
+  <button onclick="withdraw()">Вивести кошти</button>
+  <button onclick="openProfile()">Профіль</button>
+  <button onclick="logout()">Вийти</button>
+</div>
+<footer>
+  © 2025 Альфа Казино. Всі права захищені.
+  </footer>
+  
+  <!-- Модальне вікно поповнення балансу -->
+  <div id="paymentModal" class="modal">
+    <div class="modal-content">
+      <h2>Поповнення через USDT (TRC20)</h2>
+      <p>Переведіть суму на адресу:</p>
+      <p style="word-break: break-all;">TEammDmX78ckF2tE5tMsPCikNX7fWUiCfP</p>
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=TEammDmX78ckF2tE5tMsPCikNX7fWUiCfP" alt="QR-код USDT">
+      <div class="recharge-input">
+        <p>Введіть суму в USDT для розрахунку:</p>
+        <input type="number" id="usdtAmount" placeholder="Сума USDT" oninput="calculateUAH()">
+        <p id="uahResult"></p>
+        <button onclick="confirmRecharge()">Підтвердити поповнення</button>
+        <p id="confirmationMessage">Очікуємо зарахування на баланс.</p>
+      </div>
+      <div class="close" onclick="closeModal()">Закрити</div>
+    </div>
+  </div>
+  
+  <!-- Модальне вікно реєстрації -->
+  <div id="registrationModal" class="modal">
+    <div class="modal-content">
+      <h2>Реєстрація акаунта</h2>
+      <input type="text" id="profileName" placeholder="Ваш нікнейм">
+      <input type="email" id="emailAddress" placeholder="Ваш Email">
+      <input type="password" id="profilePassword" placeholder="Пароль">
+      <input type="text" id="walletAddress" placeholder="Ваш гаманець USDT">
+      <button onclick="completeRegistration()">Створити акаунт</button>
+      <div class="close" onclick="closeModal()">Закрити</div>
+    </div>
+  </div>
+  
+  <!-- Модальне вікно входу -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <h2>Вхід до акаунта</h2>
+      <input type="email" id="loginEmail" placeholder="Ваш Email">
+      <input type="password" id="loginPassword" placeholder="Пароль">
+      <button onclick="login()">Увійти</button>
+      <div class="close" onclick="closeModal()">Закрити</div>
+    </div>
+  </div>
+  
+  <!-- Модальне вікно профілю -->
+  <div id="profileModal" class="modal">
+    <div class="modal-content">
+      <h2>Профіль гравця</h2>
+      <p id="profileNameDisplay"></p>
+      <p id="profileEmailDisplay"></p>
+      <p id="profileWalletDisplay"></p>
+      <p id="profileBalanceDisplay"></p>
+      <div class="close" onclick="closeModal()">Закрити</div>
+    </div>
+  </div>
+  
+  <script>
+let user = JSON.parse(localStorage.getItem('casinoUser')) || null;
+let balance = user ? user.balance : 500;
+updateBalanceDisplay();
+
+// Элементы
+const slots = document.getElementById('slots');
+const userInfo = document.getElementById('user-info');
+
+// Звуки
+const spinSound = new Audio('https://www.fesliyanstudios.com/play-mp3/387');
+const winSound = new Audio('https://www.fesliyanstudios.com/play-mp3/6416');
+
+function updateBalanceDisplay() {
+  document.getElementById('balance').innerText = balance;
+}
+
+function spin() {
+  let bet = parseInt(document.getElementById('betAmount').value);
+  if (bet > balance) {
+    alert('Недостатньо коштів для ставки!');
+    return;
+  }
+  balance -= bet;
+  updateBalanceDisplay();
+
+  slots.classList.add('spinning');
+  spinSound.play();
+
+  setTimeout(() => {
+    slots.classList.remove('spinning');
+    const symbols = ['🍒', '🍋', '🔔', '⭐', '💎'];
+    let slot1 = symbols[Math.floor(Math.random() * symbols.length)];
+    let slot2 = symbols[Math.floor(Math.random() * symbols.length)];
+    let slot3 = symbols[Math.floor(Math.random() * symbols.length)];
+    slots.innerText = slot1 + slot2 + slot3;
+
+    const isWin = Math.random() < 0.3; // 30% шанс виграшу
+    if (slot1 === slot2 && slot2 === slot3 && isWin) {
+      let multiplier = Math.floor(Math.random() * 9) + 2; // от 2 до 10
+      let winAmount = bet * multiplier;
+      balance += winAmount;
+      updateBalanceDisplay();
+      winSound.play();
+      showWinMessage(winAmount);
+      launchFireworks();
+    }
+
+    if (balance <= 0 && !user) {
+      setTimeout(openRegistration, 500);
+    }
+  }, 1500);
+}
+
+function showWinMessage(amount) {
+  const message = document.createElement('div');
+  message.style.position = 'fixed';
+  message.style.top = '40%';
+  message.style.left = '50%';
+  message.style.transform = 'translate(-50%, -50%)';
+  message.style.background = '#4caf50';
+  message.style.color = '#fff';
+  message.style.padding = '30px 50px';
+  message.style.borderRadius = '20px';
+  message.style.fontSize = '2em';
+  message.style.zIndex = '100';
+  message.style.boxShadow = '0 0 20px #4caf50';
+  message.innerText = `Вітаємо! Ви виграли ${amount} грн!`;
+  document.body.appendChild(message);
+  setTimeout(() => {
+    document.body.removeChild(message);
+  }, 3000);
+}
+
+function launchFireworks() {
+  for (let i = 0; i < 10; i++) {
+    const firework = document.createElement('div');
+    firework.className = 'firework';
+    firework.style.left = `${Math.random() * 100}%`;
+    firework.style.top = `${Math.random() * 50 + 30}%`;
+    document.body.appendChild(firework);
+    setTimeout(() => {
+      document.body.removeChild(firework);
+    }, 800);
+  }
+}
+
+function recharge() {
+  if (!user) {
+    openRegistration();
+    return;
+  }
+  document.getElementById('paymentModal').style.display = 'flex';
+}
+
+function closeModal() {
+  document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
+}
+
+function calculateUAH() {
+  let usdt = parseFloat(document.getElementById('usdtAmount').value);
+  if (!isNaN(usdt)) {
+    let uah = usdt * 42;
+    document.getElementById('uahResult').innerText = `Ви отримаєте ${uah} грн.`;
+  } else {
+    document.getElementById('uahResult').innerText = '';
+  }
+}
+
+function confirmRecharge() {
+  document.getElementById('confirmationMessage').style.display = 'block';
+  setTimeout(() => {
+    closeModal();
+  }, 3000);
+}
+
+function openRegistration() {
+  document.getElementById('registrationModal').style.display = 'flex';
+}
+
+function completeRegistration() {
+  const name = document.getElementById('profileName').value.trim();
+  const email = document.getElementById('emailAddress').value.trim();
+  const password = document.getElementById('profilePassword').value.trim();
+  const wallet = document.getElementById('walletAddress').value.trim();
+
+  if (name && email && password && wallet) {
+    user = { name, email, password, wallet, balance };
+    localStorage.setItem('casinoUser', JSON.stringify(user));
+    userInfo.innerText = `Ви увійшли як ${user.name}`;
+    document.getElementById('authButtons').style.display = 'block';
+    closeModal();
+    alert('Акаунт створено успішно!');
+  } else {
+    alert('Будь ласка, заповніть усі поля!');
+  }
+}
+
+function login() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value.trim();
+  const savedUser = JSON.parse(localStorage.getItem('casinoUser'));
+
+  if (savedUser && savedUser.email === email && savedUser.password === password) {
+    user = savedUser;
+    balance = user.balance;
+    updateBalanceDisplay();
+    userInfo.innerText = `Ви увійшли як ${user.name}`;
+    document.getElementById('authButtons').style.display = 'block';
+    closeModal();
+    alert('Вхід успішний!');
+  } else {
+    alert('Невірні дані для входу!');
+  }
+}
+
+function logout() {
+  localStorage.removeItem('casinoUser');
+  user = null;
+  balance = 500;
+  updateBalanceDisplay();
+  document.getElementById('authButtons').style.display = 'none';
+  userInfo.innerText = '';
+  alert('Ви вийшли з акаунта!');
+}
+
+function openProfile() {
+  if (user) {
+    document.getElementById('profileNameDisplay').innerText = `Нікнейм: ${user.name}`;
+    document.getElementById('profileEmailDisplay').innerText = `Email: ${user.email}`;
+    document.getElementById('profileWalletDisplay').innerText = `Гаманець USDT: ${user.wallet}`;
+    document.getElementById('profileBalanceDisplay').innerText = `Баланс: ${balance} грн`;
+    document.getElementById('profileModal').style.display = 'flex';
+  }
+}
+
+function withdraw() {
+  if (user) {
+    alert('Ваш запит на виведення коштів прийнято. Йде обробка...');
+    setTimeout(() => {
+      alert('Виведення коштів буде здійснено протягом 24 годин.');
+    }, 3000);
+  } else {
+    openRegistration();
+  }
+}
+</script>
+
+</body>
+</html>
+  

@@ -1,4 +1,4 @@
-/* Основные стили */
+/* БАЗОВЫЕ СТИЛИ */
 body {
   margin: 0;
   padding: 0;
@@ -11,7 +11,6 @@ body {
   background-blend-mode: screen;
 }
 
-/* Заголовок */
 h1.main-title {
   margin-top: 20px;
   text-align: center;
@@ -20,7 +19,6 @@ h1.main-title {
   text-shadow: 2px 2px 8px #000;
 }
 
-/* Приветствие */
 .welcome-message {
   text-align: center;
   font-size: 1.5em;
@@ -29,7 +27,7 @@ h1.main-title {
   animation: fadeIn 2s ease-in-out;
 }
 
-/* Музыка */
+/* МУЗЫКА */
 .music-control {
   position: fixed;
   top: 15px;
@@ -39,7 +37,7 @@ h1.main-title {
   z-index: 9999;
 }
 
-/* Таймер джекпота */
+/* ТАЙМЕР ДЖЕКПОТА */
 .jackpot-timer {
   position: fixed;
   top: 15px;
@@ -53,13 +51,14 @@ h1.main-title {
   z-index: 999;
 }
 
-/* Слот-машина */
+/* СЛОТ МАШИНА */
 .slot-machine {
   background: rgba(0, 0, 0, 0.7);
   margin: 30px auto;
   padding: 30px;
   border-radius: 20px;
-  width: 400px;
+  width: 90%;
+  max-width: 600px;
   text-align: center;
   box-shadow: 0 0 20px #ffd700;
 }
@@ -78,15 +77,32 @@ h1.main-title {
 }
 
 .slots {
-  font-size: 3em;
-  margin: 30px 0;
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+  gap: 10px;
 }
 
+.slot {
+  background: rgba(255, 215, 0, 0.2);
+  border: 2px solid gold;
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+  font-size: 2em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 10px gold;
+  transition: transform 0.3s;
+}
+
+/* СТАРТ КНОПКА */
 #spinButton {
   background: gold;
   border: none;
   padding: 15px 30px;
-  font-size: 1.2em;
+  font-size: 1.5em;
   border-radius: 15px;
   color: black;
   cursor: pointer;
@@ -99,7 +115,7 @@ h1.main-title {
   box-shadow: 0 0 10px gold;
 }
 
-/* Кнопки действий */
+/* КНОПКИ ПОСЛЕ ВХОДА */
 .auth-buttons {
   margin-top: 20px;
   display: flex;
@@ -123,7 +139,7 @@ h1.main-title {
   background: #2980b9;
 }
 
-/* Секции портала */
+/* СЕКЦИИ ПОРТАЛА */
 section {
   padding: 50px 20px;
   text-align: center;
@@ -146,12 +162,12 @@ section h2 {
   font-size: 1.2em;
 }
 
-/* Часті питання (FAQ) */
+/* FAQ */
 .faq-item {
   margin: 20px 0;
 }
 
-/* Модалки */
+/* МОДАЛКИ */
 .modal {
   display: none;
   position: fixed;
@@ -200,51 +216,6 @@ section h2 {
   background: #2980b9;
 }
 
-.close {
-  margin-top: 20px;
-  cursor: pointer;
-  color: gold;
-  font-size: 1.2em;
-}
-
-/* Блеск на фоне */
-@keyframes shine {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-/* Эффект мигания кнопки */
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
-}
-
-/* Анимация появления */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-/* Адаптивка для мобилок */
-@media (max-width: 600px) {
-  .slot-machine {
-    width: 90%;
-    padding: 20px;
-  }
-  .slots {
-    font-size: 2.5em;
-  }
-  #spinButton {
-    padding: 12px 20px;
-  }
-  .auth-buttons {
-    flex-direction: column;
-    gap: 10px;
-  }
-}
-
-/* Копирование адреса кошелька */
 .copy-button {
   background: gold;
   color: black;
@@ -257,4 +228,52 @@ section h2 {
 
 .copy-button:hover {
   background: #ffcc00;
+}
+
+.close {
+  margin-top: 20px;
+  cursor: pointer;
+  color: gold;
+  font-size: 1.2em;
+}
+
+/* ЭФФЕКТЫ */
+@keyframes shine {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* АДАПТИВКА */
+@media (max-width: 600px) {
+  .slot-machine {
+    width: 95%;
+    padding: 20px;
+  }
+  .slots {
+    gap: 5px;
+  }
+  .slot {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5em;
+  }
+  #spinButton {
+    padding: 12px 20px;
+    font-size: 1.2em;
+  }
+  .auth-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
 }

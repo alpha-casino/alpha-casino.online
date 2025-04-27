@@ -1,9 +1,15 @@
 // Переменные
 let user = JSON.parse(localStorage.getItem('casinoUser')) || null;
-let balance = user ? user.balance : 500;
+let balance = user ? user.balance : (localStorage.getItem('casinoBalance') ? parseInt(localStorage.getItem('casinoBalance')) : 500);
 let musicPlaying = false;
-const slots = document.getElementById('slots');
-const musicControl = document.getElementById('musicControl');
+const symbols = ['🍒', '🍋', '🍉', '🍇', '💎', '🔔', '⭐', '7️⃣', '🍀'];
+const slots = [
+  document.getElementById('slot1'),
+  document.getElementById('slot2'),
+  document.getElementById('slot3'),
+  document.getElementById('slot4'),
+  document.getElementById('slot5')
+];
 const music = new Audio('background-music.mp3');
 music.loop = true;
 music.volume = 0.2;
@@ -13,6 +19,7 @@ updateBalanceDisplay();
 setupMusicControl();
 startJackpotTimer();
 updateUserInfo();
+checkZeroBalanceOnLoad();
 
 // Управление музыкой
 function setupMusicControl() {
@@ -33,13 +40,35 @@ function setupMusicControl() {
   });
 }
 
-// Обновить баланс на странице
+// Обновить баланс
 function updateBalanceDisplay() {
   document.getElementById('balance').innerText = balance;
+  localStorage.setItem('casinoBalance', balance);
+  if (balance <= 0) {
+    disableSpinButton();
+  } else {
+    enableSpinButton();
+  }
 }
 
-// Крутка слота
-function spin() {
+// Отключить/включить кнопку СТАРТ
+function disableSpinButton() {
+  document.getElementById('spinButton').disabled = true;
+}
+
+function enableSpinButton() {
+  document.getElementById('spinButton').disabled = false;
+}
+
+// Проверка баланса при загрузке
+function checkZeroBalanceOnLoad() {
+  if (balance <= 0 && !user) {
+    setTimeout(openRegistration, 500);
+  }
+}
+
+// Запуск крутки
+function startSpin() {
   const bet = parseInt(document.getElementById('betAmount').value);
   if (bet > balance) {
     alert('Недостатньо коштів для ставки!');
@@ -48,36 +77,51 @@ function spin() {
 
   balance -= bet;
   updateBalanceDisplay();
-  slots.classList.add('spinning');
-  navigator.vibrate(50);
+  disableSpinButton();
+  
+  let spinTimes = [0, 0, 0, 0, 0];
+  let spinIntervals = [];
 
-  setTimeout(() => {
-    slots.classList.remove('spinning');
-    const symbols = ['🍒', '🍋', '🔔', '⭐', '💎'];
-    const s1 = symbols[Math.floor(Math.random() * symbols.length)];
-    const s2 = symbols[Math.floor(Math.random() * symbols.length)];
-    const s3 = symbols[Math.floor(Math.random() * symbols.length)];
-    slots.innerText = `${s1}${s2}${s3}`;
+  for (let i = 0; i < slots.length; i++) {
+    spinIntervals[i] = setInterval(() => {
+      slots[i].innerText = symbols[Math.floor(Math.random() * symbols.length)];
+    }, 100);
+  }
 
-    if (s1 === s2 && s2 === s3) {
-      let multiplier = Math.floor(Math.random() * 9) + 2;
-      let winAmount = bet * multiplier;
-      balance += winAmount;
-      updateBalanceDisplay();
-      celebrateWin(winAmount);
-    } else if (balance <= 0) {
-      setTimeout(() => {
-        if (user) {
-          recharge();
-        } else {
-          openRegistration();
-        }
-      }, 500);
-    }
-  }, 1500);
+  // Остановка по очереди
+  for (let i = 0; i < slots.length; i++) {
+    setTimeout(() => {
+      clearInterval(spinIntervals[i]);
+      slots[i].innerText = symbols[Math.floor(Math.random() * symbols.length)];
+
+      if (i === slots.length - 1) {
+        // Проверка победы
+        checkWin(bet);
+      }
+    }, 1000 + i * 500);
+  }
 }
 
-// Победа: вибрация + мигание + салют
+// Проверка выигрыша
+function checkWin(bet) {
+  const results = slots.map(slot => slot.innerText);
+  const allSame = results.every(symbol => symbol === results[0]);
+
+  if (allSame) {
+    let multiplier = Math.floor(Math.random() * 5) + 5;
+    let winAmount = bet * multiplier;
+    balance += winAmount;
+    updateBalanceDisplay();
+    celebrateWin(winAmount);
+  } else if (balance <= 0 && !user) {
+    setTimeout(openRegistration, 500);
+  } else {
+    updateBalanceDisplay();
+  }
+  enableSpinButton();
+}
+
+// Празднование победы
 function celebrateWin(amount) {
   flashScreen('white');
   vibrateWin();
@@ -86,7 +130,7 @@ function celebrateWin(amount) {
   showWinMessage(amount);
 }
 
-// Вибрация победы
+// Вибрация
 function vibrateWin() {
   if (navigator.vibrate) {
     navigator.vibrate([300, 200, 300]);
@@ -111,7 +155,7 @@ function launchFireworks() {
   }
 }
 
-// Корона при выигрыше
+// Корона
 function showCrown() {
   const crown = document.createElement('div');
   crown.innerText = '👑';
@@ -152,7 +196,7 @@ function showWinMessage(amount) {
   msg.style.transform = 'translate(-50%, -50%)';
   msg.style.background = '#4caf50';
   msg.style.padding = '20px 40px';
-  msg.style.borderRadius = '20px';
+  msg.style.borderRadius: '20px';
   msg.style.color = '#fff';
   msg.style.fontSize = '2em';
   msg.style.zIndex = '999';
@@ -163,7 +207,7 @@ function showWinMessage(amount) {
   }, 3000);
 }
 
-// Модалки
+// МОДАЛЬНІ ВІКНА
 function recharge() {
   document.getElementById('paymentModal').style.display = 'flex';
 }
@@ -214,6 +258,7 @@ function login() {
 
 function logout() {
   localStorage.removeItem('casinoUser');
+  localStorage.setItem('casinoBalance', 500);
   user = null;
   balance = 500;
   updateBalanceDisplay();
@@ -236,7 +281,7 @@ function closeModal() {
   document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
 }
 
-// Перевод USDT ➔ грн
+// Конвертер валют
 function calculateUAH() {
   const usdt = parseFloat(document.getElementById('usdtAmount').value);
   if (!isNaN(usdt)) {
@@ -247,7 +292,7 @@ function calculateUAH() {
   }
 }
 
-// Таймер Джекпота
+// Таймер джекпота
 let minutes = 30;
 let seconds = 0;
 
@@ -267,13 +312,6 @@ function startJackpotTimer() {
     }
     document.getElementById('jackpotTimer').innerText = `Джекпот через: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   }, 1000);
-}
-
-// Отображение инфы о пользователе
-function updateUserInfo() {
-  if (user) {
-    document.getElementById('user-info').innerText = `Ви увійшли як ${user.name}`;
-  }
 }
 
 // Копирование адреса кошелька

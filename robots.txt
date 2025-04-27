@@ -1,3 +1,2 @@
 User-agent: *
 Allow: /
-Sitemap: https://alpha-casino.github.io/sitemap.xml

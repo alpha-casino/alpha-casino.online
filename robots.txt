@@ -1,2 +1,5 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://alpha-casino.github.io/alpha-casino.online/sitemap.xml
+Host: https://alpha-casino.github.io/alpha-casino.online

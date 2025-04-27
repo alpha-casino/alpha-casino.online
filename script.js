@@ -80,14 +80,15 @@ function startSpin() {
   disableSpinButton();
 
   let running = [true, true, true, true, true];
-  let stopTimes = [1500, 2000, 2500, 3000, 3500];
-  let timers = [];
+  let stopDelays = [1500, 2000, 2500, 3000, 3500];
+  let intervals = [];
 
   for (let i = 0; i < slots.length; i++) {
     spinSlot(i);
-    timers[i] = setTimeout(() => {
+
+    setTimeout(() => {
       running[i] = false;
-    }, stopTimes[i]);
+    }, stopDelays[i]);
   }
 
   function spinSlot(index) {
@@ -100,10 +101,9 @@ function startSpin() {
     animate();
   }
 
-  // После остановки всех барабанов
   setTimeout(() => {
     checkWin(bet);
-  }, Math.max(...stopTimes) + 300);
+  }, Math.max(...stopDelays) + 500);
 }
 
 // Проверка выигрыша
@@ -199,7 +199,7 @@ function showWinMessage(amount) {
   msg.style.left = '50%';
   msg.style.transform = 'translate(-50%, -50%)';
   msg.style.background = '#4caf50';
-  msg.style.padding: '20px 40px';
+  msg.style.padding = '20px 40px';
   msg.style.borderRadius = '20px';
   msg.style.color = '#fff';
   msg.style.fontSize = '2em';

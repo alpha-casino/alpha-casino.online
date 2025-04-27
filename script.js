@@ -243,6 +243,7 @@ function completeRegistration() {
     updateUserInfo();
     closeModal();
     alert('Акаунт створено успішно!');
+    openOutOfMoneyModal();
   } else {
     alert('Будь ласка, заповніть усі поля!');
   }
@@ -261,6 +262,7 @@ function login() {
     updateUserInfo();
     closeModal();
     alert('Вхід успішний!');
+    openOutOfMoneyModal();
   } else {
     alert('Невірні дані для входу!');
   }

@@ -4,11 +4,11 @@ let balance = user ? user.balance : 500;
 let musicPlaying = false;
 const slots = document.getElementById('slots');
 const musicControl = document.getElementById('musicControl');
-const music = new Audio('https://www.fesliyanstudios.com/play-mp3/387'); // Можешь заменить ссылку на свою музыку
+const music = new Audio('background-music.mp3');
 music.loop = true;
 music.volume = 0.2;
 
-// Первоначальный запуск
+// Первичный запуск
 updateBalanceDisplay();
 setupMusicControl();
 startJackpotTimer();
@@ -18,7 +18,7 @@ function updateBalanceDisplay() {
   document.getElementById('balance').innerText = balance;
 }
 
-// Управление музыкой
+// Музыкальный контроль
 function setupMusicControl() {
   musicControl.addEventListener('click', () => {
     if (musicPlaying) {
@@ -30,7 +30,7 @@ function setupMusicControl() {
   });
 }
 
-// Кнопка "Крутити"
+// Крутка
 function spin() {
   const bet = parseInt(document.getElementById('betAmount').value);
   if (bet > balance) {
@@ -71,10 +71,68 @@ function spin() {
 
 // Празднование победы
 function celebrateWin(amount) {
+  flashScreen('white');
+  vibrateWin();
   launchFireworks();
   showCrown();
-  vibrateWin();
   showWinMessage(amount);
+}
+
+// Вибрация при победе
+function vibrateWin() {
+  if (navigator.vibrate) {
+    navigator.vibrate([300, 200, 300]);
+  }
+}
+
+// Салют
+function launchFireworks() {
+  for (let i = 0; i < 20; i++) {
+    const firework = document.createElement('div');
+    firework.className = 'firework';
+    firework.style.left = `${Math.random() * 100}%`;
+    firework.style.top = `${Math.random() * 80}%`;
+    firework.style.width = '10px';
+    firework.style.height = '10px';
+    firework.style.background = 'gold';
+    firework.style.borderRadius = '50%';
+    firework.style.position = 'absolute';
+    firework.style.animation = 'explode 1s ease-out forwards';
+    document.body.appendChild(firework);
+    setTimeout(() => document.body.removeChild(firework), 1000);
+  }
+}
+
+// Показ короны при выиграше
+function showCrown() {
+  const crown = document.createElement('div');
+  crown.innerText = '👑';
+  crown.style.position = 'absolute';
+  crown.style.top = '20%';
+  crown.style.left = '50%';
+  crown.style.transform = 'translateX(-50%)';
+  crown.style.fontSize = '6em';
+  crown.style.zIndex = '999';
+  document.body.appendChild(crown);
+  setTimeout(() => {
+    document.body.removeChild(crown);
+  }, 2000);
+}
+
+// Мигание экрана
+function flashScreen(color) {
+  const flash = document.createElement('div');
+  flash.style.position = 'fixed';
+  flash.style.top = '0';
+  flash.style.left = '0';
+  flash.style.width = '100%';
+  flash.style.height = '100%';
+  flash.style.backgroundColor = color;
+  flash.style.opacity = '0.7';
+  flash.style.zIndex = '9999';
+  flash.style.animation = 'flash 0.5s forwards';
+  document.body.appendChild(flash);
+  setTimeout(() => document.body.removeChild(flash), 500);
 }
 
 // Показ сообщения о выигрыше
@@ -97,48 +155,7 @@ function showWinMessage(amount) {
   }, 3000);
 }
 
-// Вибрация при победе
-function vibrateWin() {
-  if (navigator.vibrate) {
-    navigator.vibrate([300, 200, 300]);
-  }
-}
-
-// Салюты
-function launchFireworks() {
-  for (let i = 0; i < 10; i++) {
-    const firework = document.createElement('div');
-    firework.className = 'firework';
-    firework.style.left = `${Math.random() * 100}%`;
-    firework.style.top = `${Math.random() * 80}%`;
-    firework.style.width = '10px';
-    firework.style.height = '10px';
-    firework.style.background = 'yellow';
-    firework.style.borderRadius = '50%';
-    firework.style.position = 'absolute';
-    firework.style.animation = 'explode 1s ease-out forwards';
-    document.body.appendChild(firework);
-    setTimeout(() => document.body.removeChild(firework), 1000);
-  }
-}
-
-// Показ короны при большом выигрыше
-function showCrown() {
-  const crown = document.createElement('div');
-  crown.innerText = '👑';
-  crown.style.position = 'absolute';
-  crown.style.top = '20%';
-  crown.style.left = '50%';
-  crown.style.transform = 'translateX(-50%)';
-  crown.style.fontSize = '6em';
-  crown.style.zIndex = '999';
-  document.body.appendChild(crown);
-  setTimeout(() => {
-    document.body.removeChild(crown);
-  }, 2000);
-}
-
-// Работа модальных окон
+// Модалки
 function recharge() {
   document.getElementById('paymentModal').style.display = 'flex';
 }
@@ -214,7 +231,7 @@ function closeModal() {
   document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
 }
 
-// Перевод суммы USDT → UAH
+// Перевод USDT в гривні
 function calculateUAH() {
   const usdt = parseFloat(document.getElementById('usdtAmount').value);
   if (!isNaN(usdt)) {
@@ -235,10 +252,7 @@ function startJackpotTimer() {
       if (minutes === 0) {
         minutes = 30;
         seconds = 0;
-        document.getElementById('jackpotTimer').style.background = '#e74c3c';
-        setTimeout(() => {
-          document.getElementById('jackpotTimer').style.background = '#f39c12';
-        }, 1000);
+        flashScreen('gold');
       } else {
         minutes--;
         seconds = 59;

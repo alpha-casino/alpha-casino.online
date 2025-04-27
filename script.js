@@ -46,6 +46,7 @@ function updateBalanceDisplay() {
   localStorage.setItem('casinoBalance', balance);
   if (balance <= 0) {
     disableSpinButton();
+    showOutOfMoneyMessage();
   } else {
     enableSpinButton();
   }
@@ -58,6 +59,11 @@ function disableSpinButton() {
 
 function enableSpinButton() {
   document.getElementById('spinButton').disabled = false;
+}
+
+// Показывать сообщение о недостаточности средств
+function showOutOfMoneyMessage() {
+  alert("Ваш баланс на нуле. Пожалуйста, пополните счёт.");
 }
 
 // Проверка баланса при загрузке

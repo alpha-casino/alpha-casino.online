@@ -1,6 +1,6 @@
 // Переменные
 let user = JSON.parse(localStorage.getItem('casinoUser')) || null;
-let balance = user ? user.balance : (localStorage.getItem('casinoBalance') ? parseInt(localStorage.getItem('casinoBalance')) : 500);
+let balance = user ? user.balance : (localStorage.getItem('casinoBalance') ? parseInt(localStorage.getItem('casinoBalance')) : 0);
 let musicPlaying = false;
 const symbols = ['🍒', '🍋', '🍉', '🍇', '💎', '🔔', '⭐', '7️⃣', '🍀'];
 const slots = [
@@ -87,7 +87,6 @@ function startSpin() {
 
   let running = [true, true, true, true, true];
   let stopDelays = [1500, 2000, 2500, 3000, 3500];
-  let intervals = [];
 
   for (let i = 0; i < slots.length; i++) {
     spinSlot(i);
@@ -233,11 +232,10 @@ function openRegistration() {
 function completeRegistration() {
   const name = document.getElementById('profileName').value.trim();
   const email = document.getElementById('emailAddress').value.trim();
-  const password = document.getElementById('profilePassword').value.trim();
   const wallet = document.getElementById('walletAddress').value.trim();
 
-  if (name && email && password && wallet) {
-    user = { name, email, password, wallet, balance };
+  if (name && email && wallet) {
+    user = { name, email, wallet, balance };
     localStorage.setItem('casinoUser', JSON.stringify(user));
     document.getElementById('authButtons').style.display = 'flex';
     updateUserInfo();
@@ -251,10 +249,9 @@ function completeRegistration() {
 
 function login() {
   const email = document.getElementById('loginEmail').value.trim();
-  const password = document.getElementById('loginPassword').value.trim();
   const savedUser = JSON.parse(localStorage.getItem('casinoUser'));
 
-  if (savedUser && savedUser.email === email && savedUser.password === password) {
+  if (savedUser && savedUser.email === email) {
     user = savedUser;
     balance = user.balance;
     updateBalanceDisplay();
@@ -262,7 +259,6 @@ function login() {
     updateUserInfo();
     closeModal();
     alert('Вхід успішний!');
-    openOutOfMoneyModal();
   } else {
     alert('Невірні дані для входу!');
   }

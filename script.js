@@ -63,7 +63,7 @@ function enableSpinButton() {
 
 // Показывать сообщение о недостаточности средств
 function showOutOfMoneyMessage() {
-  alert("Ваш баланс на нуле. Пожалуйста, пополните счёт.");
+  document.getElementById('outOfMoneyModal').style.display = 'flex';
 }
 
 // Проверка баланса при загрузке

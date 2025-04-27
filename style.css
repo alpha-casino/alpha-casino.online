@@ -1,0 +1,215 @@
+/* Основные стили */
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: url('background.jpg') no-repeat center center fixed;
+  background-size: cover;
+  color: #fff;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+h1.main-title {
+  margin-top: 20px;
+  font-size: 3em;
+  text-shadow: 2px 2px 5px #000;
+}
+
+.welcome-message {
+  font-size: 1.5em;
+  margin-top: 20px;
+  animation: fadeIn 2s ease-in-out;
+  text-align: center;
+  text-shadow: 2px 2px 5px #000;
+}
+
+footer {
+  margin-top: auto;
+  padding: 20px;
+  font-size: 1em;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+}
+
+/* Анимации */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Слот машина */
+.slot-machine {
+  background: rgba(0, 0, 0, 0.8);
+  padding: 30px;
+  margin: 30px auto;
+  border-radius: 20px;
+  box-shadow: 0 0 30px #f39c12;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.balance, .bet {
+  font-size: 1.5em;
+  margin: 15px 0;
+}
+
+.bet input {
+  padding: 10px;
+  width: 100px;
+  border: none;
+  border-radius: 10px;
+}
+
+.slots {
+  font-size: 4em;
+  margin: 30px 0;
+  letter-spacing: 20px;
+  animation: spin 0.5s infinite linear;
+  transition: transform 0.3s;
+}
+
+.slots.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotateX(0deg); }
+  to { transform: rotateX(360deg); }
+}
+
+/* Кнопка крутить */
+#spinButton {
+  background-color: #f39c12;
+  padding: 15px 30px;
+  font-size: 1.2em;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  animation: blink 2s infinite;
+  transition: 0.3s;
+}
+
+#spinButton:hover {
+  background-color: #e67e22;
+  box-shadow: 0 0 10px #f39c12;
+}
+
+/* Кнопки внизу */
+.auth-buttons {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.auth-buttons button {
+  background-color: #3498db;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1em;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.auth-buttons button:hover {
+  background-color: #2980b9;
+}
+
+/* Модальні вікна */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(5px);
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #1c1c3c;
+  padding: 30px;
+  border-radius: 20px;
+  max-width: 90%;
+  text-align: center;
+}
+
+.modal-content input {
+  display: block;
+  margin: 10px auto;
+  padding: 10px;
+  width: 80%;
+  border-radius: 10px;
+  border: none;
+}
+
+.modal-content button {
+  margin-top: 10px;
+}
+
+.close {
+  margin-top: 15px;
+  cursor: pointer;
+  color: #f39c12;
+  font-size: 1.2em;
+}
+
+/* Таймер джекпоту */
+.jackpot-timer {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: #f39c12;
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-size: 1em;
+  font-weight: bold;
+  box-shadow: 0 0 15px #f39c12;
+}
+
+/* Музыкальная кнопка */
+.music-control {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  font-size: 2em;
+  cursor: pointer;
+}
+
+/* Адаптивность */
+@media (max-width: 600px) {
+  .slot-machine {
+    width: 90%;
+    padding: 20px;
+  }
+  .slots {
+    font-size: 3em;
+    letter-spacing: 10px;
+  }
+  #spinButton {
+    padding: 12px 20px;
+    font-size: 1em;
+  }
+  .auth-buttons {
+    flex-direction: column;
+  }
+}

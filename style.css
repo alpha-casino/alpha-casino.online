@@ -1,4 +1,4 @@
-/* БАЗОВЫЕ СТИЛИ */
+/* Базовые настройки */
 body {
   margin: 0;
   padding: 0;
@@ -11,6 +11,7 @@ body {
   background-blend-mode: screen;
 }
 
+/* Заголовки */
 h1.main-title {
   margin-top: 20px;
   text-align: center;
@@ -27,7 +28,7 @@ h1.main-title {
   animation: fadeIn 2s ease-in-out;
 }
 
-/* МУЗЫКА */
+/* Музыка */
 .music-control {
   position: fixed;
   top: 15px;
@@ -37,7 +38,7 @@ h1.main-title {
   z-index: 9999;
 }
 
-/* ТАЙМЕР ДЖЕКПОТА */
+/* Таймер джекпота */
 .jackpot-timer {
   position: fixed;
   top: 15px;
@@ -51,14 +52,14 @@ h1.main-title {
   z-index: 999;
 }
 
-/* СЛОТ МАШИНА */
+/* Слот-машина */
 .slot-machine {
   background: rgba(0, 0, 0, 0.7);
   margin: 30px auto;
   padding: 30px;
   border-radius: 20px;
   width: 90%;
-  max-width: 600px;
+  max-width: 700px;
   text-align: center;
   box-shadow: 0 0 20px #ffd700;
 }
@@ -76,20 +77,22 @@ h1.main-title {
   font-size: 1.2em;
 }
 
+/* Сами барабаны */
 .slots {
   display: flex;
   justify-content: center;
+  align-items: center;
   margin: 20px 0;
-  gap: 10px;
+  gap: 15px;
 }
 
 .slot {
   background: rgba(255, 215, 0, 0.2);
   border: 2px solid gold;
-  width: 60px;
-  height: 60px;
+  width: 80px;
+  height: 80px;
   border-radius: 10px;
-  font-size: 2em;
+  font-size: 2.5em;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -97,7 +100,7 @@ h1.main-title {
   transition: transform 0.3s;
 }
 
-/* СТАРТ КНОПКА */
+/* Кнопка СТАРТ */
 #spinButton {
   background: gold;
   border: none;
@@ -115,7 +118,7 @@ h1.main-title {
   box-shadow: 0 0 10px gold;
 }
 
-/* КНОПКИ ПОСЛЕ ВХОДА */
+/* Кнопки управления */
 .auth-buttons {
   margin-top: 20px;
   display: flex;
@@ -139,7 +142,7 @@ h1.main-title {
   background: #2980b9;
 }
 
-/* СЕКЦИИ ПОРТАЛА */
+/* Секции */
 section {
   padding: 50px 20px;
   text-align: center;
@@ -162,12 +165,11 @@ section h2 {
   font-size: 1.2em;
 }
 
-/* FAQ */
 .faq-item {
   margin: 20px 0;
 }
 
-/* МОДАЛКИ */
+/* Модальные окна */
 .modal {
   display: none;
   position: fixed;
@@ -237,7 +239,7 @@ section h2 {
   font-size: 1.2em;
 }
 
-/* ЭФФЕКТЫ */
+/* Анимации */
 @keyframes shine {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
@@ -254,19 +256,19 @@ section h2 {
   to { opacity: 1; }
 }
 
-/* АДАПТИВКА */
+/* Адаптив */
 @media (max-width: 600px) {
   .slot-machine {
     width: 95%;
     padding: 20px;
   }
   .slots {
-    gap: 5px;
+    gap: 8px;
   }
   .slot {
-    width: 50px;
-    height: 50px;
-    font-size: 1.5em;
+    width: 60px;
+    height: 60px;
+    font-size: 2em;
   }
   #spinButton {
     padding: 12px 20px;

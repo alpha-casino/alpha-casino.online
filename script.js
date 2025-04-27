@@ -78,28 +78,32 @@ function startSpin() {
   balance -= bet;
   updateBalanceDisplay();
   disableSpinButton();
-  
-  let spinTimes = [0, 0, 0, 0, 0];
-  let spinIntervals = [];
+
+  let running = [true, true, true, true, true];
+  let stopTimes = [1500, 2000, 2500, 3000, 3500];
+  let timers = [];
 
   for (let i = 0; i < slots.length; i++) {
-    spinIntervals[i] = setInterval(() => {
-      slots[i].innerText = symbols[Math.floor(Math.random() * symbols.length)];
-    }, 100);
+    spinSlot(i);
+    timers[i] = setTimeout(() => {
+      running[i] = false;
+    }, stopTimes[i]);
   }
 
-  // Остановка по очереди
-  for (let i = 0; i < slots.length; i++) {
-    setTimeout(() => {
-      clearInterval(spinIntervals[i]);
-      slots[i].innerText = symbols[Math.floor(Math.random() * symbols.length)];
-
-      if (i === slots.length - 1) {
-        // Проверка победы
-        checkWin(bet);
+  function spinSlot(index) {
+    function animate() {
+      if (running[index]) {
+        slots[index].innerText = symbols[Math.floor(Math.random() * symbols.length)];
+        requestAnimationFrame(animate);
       }
-    }, 1000 + i * 500);
+    }
+    animate();
   }
+
+  // После остановки всех барабанов
+  setTimeout(() => {
+    checkWin(bet);
+  }, Math.max(...stopTimes) + 300);
 }
 
 // Проверка выигрыша
@@ -195,8 +199,8 @@ function showWinMessage(amount) {
   msg.style.left = '50%';
   msg.style.transform = 'translate(-50%, -50%)';
   msg.style.background = '#4caf50';
-  msg.style.padding = '20px 40px';
-  msg.style.borderRadius: '20px';
+  msg.style.padding: '20px 40px';
+  msg.style.borderRadius = '20px';
   msg.style.color = '#fff';
   msg.style.fontSize = '2em';
   msg.style.zIndex = '999';
@@ -207,7 +211,7 @@ function showWinMessage(amount) {
   }, 3000);
 }
 
-// МОДАЛЬНІ ВІКНА
+// Модалки
 function recharge() {
   document.getElementById('paymentModal').style.display = 'flex';
 }
@@ -281,7 +285,7 @@ function closeModal() {
   document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
 }
 
-// Конвертер валют
+// Перевод USDT ➔ грн
 function calculateUAH() {
   const usdt = parseFloat(document.getElementById('usdtAmount').value);
   if (!isNaN(usdt)) {

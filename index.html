@@ -28,7 +28,7 @@
   <div class="balance">Баланс: <span id="balance">500</span> грн</div>
   <div class="bet">Ставка: <input type="number" id="betAmount" value="10" min="10" step="10"> грн</div>
   <div class="slots" id="slots">🎰🎰🎰</div>
-  <button id="spinButton" onclick="spin()">Крутити</button>
+  <button id="spinButton" onclick="spin()">СТАРТ</button>
 </div>
 
 <!-- Кнопки для гравців -->
@@ -107,14 +107,15 @@
   <div class="modal-content">
     <h2>Поповнення через USDT (TRC20)</h2>
     <p>Переведіть суму на адресу:</p>
-    <p class="wallet-address">TEammDmX78ckF2tE5tMsPCikNX7fWUiCfP</p>
-    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=TEammDmX78ckF2tE5tMsPCikNX7fWUiCfP" alt="QR-код USDT">
+    <p class="wallet-address" id="walletAddressText">TEammDmX78ckF2tE5tMsPCikNX7fWUiCfP</p>
+    <button class="copy-button" onclick="copyWallet()">Скопіювати адресу</button>
+    <img id="qrCode" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=TEammDmX78ckF2tE5tMsPCikNX7fWUiCfP" alt="QR-код USDT">
     <div class="recharge-input">
       <p>Введіть суму в USDT для розрахунку:</p>
       <input type="number" id="usdtAmount" placeholder="Сума USDT" oninput="calculateUAH()">
       <p id="uahResult"></p>
       <button onclick="confirmRecharge()">Підтвердити поповнення</button>
-      <p id="confirmationMessage">Очікуємо зарахування на баланс.</p>
+      <p id="confirmationMessage"></p>
     </div>
     <div class="close" onclick="closeModal()">Закрити</div>
   </div>

@@ -8,18 +8,21 @@ const music = new Audio('background-music.mp3');
 music.loop = true;
 music.volume = 0.2;
 
-// Первичный запуск
+// Инициализация
 updateBalanceDisplay();
 setupMusicControl();
 startJackpotTimer();
+updateUserInfo();
 
-// Обновление баланса
-function updateBalanceDisplay() {
-  document.getElementById('balance').innerText = balance;
-}
-
-// Музыкальный контроль
+// Управление музыкой
 function setupMusicControl() {
+  document.addEventListener('click', () => {
+    if (!musicPlaying) {
+      music.play();
+      musicPlaying = true;
+    }
+  }, { once: true });
+
   musicControl.addEventListener('click', () => {
     if (musicPlaying) {
       music.pause();
@@ -30,18 +33,23 @@ function setupMusicControl() {
   });
 }
 
-// Крутка
+// Обновить баланс на странице
+function updateBalanceDisplay() {
+  document.getElementById('balance').innerText = balance;
+}
+
+// Крутка слота
 function spin() {
   const bet = parseInt(document.getElementById('betAmount').value);
   if (bet > balance) {
     alert('Недостатньо коштів для ставки!');
     return;
   }
+
   balance -= bet;
   updateBalanceDisplay();
-
   slots.classList.add('spinning');
-  navigator.vibrate(100);
+  navigator.vibrate(50);
 
   setTimeout(() => {
     slots.classList.remove('spinning');
@@ -69,7 +77,7 @@ function spin() {
   }, 1500);
 }
 
-// Празднование победы
+// Победа: вибрация + мигание + салют
 function celebrateWin(amount) {
   flashScreen('white');
   vibrateWin();
@@ -78,7 +86,7 @@ function celebrateWin(amount) {
   showWinMessage(amount);
 }
 
-// Вибрация при победе
+// Вибрация победы
 function vibrateWin() {
   if (navigator.vibrate) {
     navigator.vibrate([300, 200, 300]);
@@ -103,7 +111,7 @@ function launchFireworks() {
   }
 }
 
-// Показ короны при выиграше
+// Корона при выигрыше
 function showCrown() {
   const crown = document.createElement('div');
   crown.innerText = '👑';
@@ -135,7 +143,7 @@ function flashScreen(color) {
   setTimeout(() => document.body.removeChild(flash), 500);
 }
 
-// Показ сообщения о выигрыше
+// Сообщение о выигрыше
 function showWinMessage(amount) {
   const msg = document.createElement('div');
   msg.style.position = 'fixed';
@@ -161,10 +169,7 @@ function recharge() {
 }
 
 function confirmRecharge() {
-  document.getElementById('confirmationMessage').style.display = 'block';
-  setTimeout(() => {
-    closeModal();
-  }, 3000);
+  document.getElementById('confirmationMessage').innerText = 'Очікуємо зарахування на баланс.';
 }
 
 function openRegistration() {
@@ -231,7 +236,7 @@ function closeModal() {
   document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
 }
 
-// Перевод USDT в гривні
+// Перевод USDT ➔ грн
 function calculateUAH() {
   const usdt = parseFloat(document.getElementById('usdtAmount').value);
   if (!isNaN(usdt)) {
@@ -264,9 +269,17 @@ function startJackpotTimer() {
   }, 1000);
 }
 
-// Отображение имени игрока
+// Отображение инфы о пользователе
 function updateUserInfo() {
   if (user) {
     document.getElementById('user-info').innerText = `Ви увійшли як ${user.name}`;
   }
+}
+
+// Копирование адреса кошелька
+function copyWallet() {
+  const walletText = document.getElementById('walletAddressText').innerText;
+  navigator.clipboard.writeText(walletText).then(() => {
+    alert('Адресу скопійовано!');
+  });
 }

@@ -1,4 +1,4 @@
-/* Общие стили */
+/* Основные стили */
 body {
   margin: 0;
   padding: 0;
@@ -7,8 +7,11 @@ body {
   background-size: cover;
   color: #fff;
   overflow-x: hidden;
+  animation: shine 30s linear infinite;
+  background-blend-mode: screen;
 }
 
+/* Заголовок */
 h1.main-title {
   margin-top: 20px;
   text-align: center;
@@ -17,20 +20,13 @@ h1.main-title {
   text-shadow: 2px 2px 8px #000;
 }
 
+/* Приветствие */
 .welcome-message {
   text-align: center;
   font-size: 1.5em;
   margin-top: 15px;
   color: #ffd700;
   animation: fadeIn 2s ease-in-out;
-}
-
-footer {
-  text-align: center;
-  padding: 20px;
-  background: rgba(0, 0, 0, 0.7);
-  margin-top: 50px;
-  font-size: 0.9em;
 }
 
 /* Музыка */
@@ -43,7 +39,7 @@ footer {
   z-index: 9999;
 }
 
-/* Джекпот таймер */
+/* Таймер джекпота */
 .jackpot-timer {
   position: fixed;
   top: 15px;
@@ -103,7 +99,7 @@ footer {
   box-shadow: 0 0 10px gold;
 }
 
-/* Кнопки после входа */
+/* Кнопки действий */
 .auth-buttons {
   margin-top: 20px;
   display: flex;
@@ -127,7 +123,7 @@ footer {
   background: #2980b9;
 }
 
-/* Блоки портала */
+/* Секции портала */
 section {
   padding: 50px 20px;
   text-align: center;
@@ -150,12 +146,12 @@ section h2 {
   font-size: 1.2em;
 }
 
-/* FAQ */
+/* Часті питання (FAQ) */
 .faq-item {
   margin: 20px 0;
 }
 
-/* Модальные вікна */
+/* Модалки */
 .modal {
   display: none;
   position: fixed;
@@ -191,6 +187,17 @@ section h2 {
 
 .modal-content button {
   margin-top: 15px;
+  padding: 10px 20px;
+  font-size: 1em;
+  border-radius: 10px;
+  border: none;
+  background: #3498db;
+  color: white;
+  cursor: pointer;
+}
+
+.modal-content button:hover {
+  background: #2980b9;
 }
 
 .close {
@@ -200,17 +207,6 @@ section h2 {
   font-size: 1.2em;
 }
 
-/* Эффекты */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
-}
-
 /* Блеск на фоне */
 @keyframes shine {
   0% { background-position: 0% 50%; }
@@ -218,14 +214,19 @@ section h2 {
   100% { background-position: 0% 50%; }
 }
 
-body {
-  background: url('background.jpg') no-repeat center center fixed;
-  background-size: cover;
-  animation: shine 30s linear infinite;
-  background-blend-mode: screen;
+/* Эффект мигания кнопки */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
 }
 
-/* Адаптивка */
+/* Анимация появления */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Адаптивка для мобилок */
 @media (max-width: 600px) {
   .slot-machine {
     width: 90%;
@@ -241,4 +242,19 @@ body {
     flex-direction: column;
     gap: 10px;
   }
+}
+
+/* Копирование адреса кошелька */
+.copy-button {
+  background: gold;
+  color: black;
+  padding: 10px 20px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: none;
+}
+
+.copy-button:hover {
+  background: #ffcc00;
 }

@@ -2,8 +2,8 @@
 let user = JSON.parse(localStorage.getItem('casinoUser')) || null;
 let balance = user ? user.balance : (localStorage.getItem('casinoBalance') ? parseInt(localStorage.getItem('casinoBalance')) : 500);
 let musicPlaying = false;
-const symbols = ['🍒', '🍋', '🍉', '🍇', '💎', '🔔', '⭐', '7️⃣', '🍀'];
 let running = [false, false, false, false, false];
+const symbols = ['🍒', '🍋', '🍉', '🍇', '💎', '🔔', '⭐', '7️⃣', '🍀'];
 const slots = [
   document.getElementById('slot1'),
   document.getElementById('slot2'),
@@ -20,22 +20,9 @@ updateBalanceDisplay();
 setupMusicControl();
 startJackpotTimer();
 checkZeroBalanceOnLoad();
-updateUserInfo();
 
 // Музыка
 function setupMusicControl() {
-  const musicControl = document.getElementById('musicControl');
-  if (!musicControl) return;
-
-  function toggleMusic() {
-    if (musicPlaying) {
-      music.pause();
-    } else {
-      music.play();
-    }
-    musicPlaying = !musicPlaying;
-  }
-
   document.addEventListener('click', () => {
     if (!musicPlaying) {
       music.play();
@@ -49,12 +36,9 @@ function setupMusicControl() {
       musicPlaying = true;
     }
   }, { once: true });
-
-  musicControl.addEventListener('click', toggleMusic);
-  musicControl.addEventListener('touchstart', toggleMusic);
 }
 
-// Обновить баланс
+// Баланс
 function updateBalanceDisplay() {
   if (isNaN(balance) || balance < 0) {
     balance = 0;
@@ -74,7 +58,6 @@ function updateBalanceDisplay() {
   }
 }
 
-// Кнопки
 function disableSpinButton() {
   document.getElementById('spinButton').disabled = true;
 }
@@ -83,7 +66,7 @@ function enableSpinButton() {
   document.getElementById('spinButton').disabled = false;
 }
 
-// Проверка баланса при загрузке
+// Проверка нулевого баланса
 function checkZeroBalanceOnLoad() {
   if (balance <= 0) {
     if (!user) {
@@ -152,7 +135,7 @@ function checkWin(bet) {
   enableSpinButton();
 }
 
-// Эффекты при выигрыше
+// Выигрышные эффекты
 function celebrateWin(amount) {
   flashScreen('white');
   vibrateWin();
@@ -218,9 +201,9 @@ function showWinMessage(amount) {
   msg.style.top = '30%';
   msg.style.left = '50%';
   msg.style.transform = 'translate(-50%, -50%)';
-  msg.style.background: '#4caf50';
-  msg.style.padding: '20px 40px';
-  msg.style.borderRadius: '20px';
+  msg.style.background = '#4caf50';
+  msg.style.padding = '20px 40px';
+  msg.style.borderRadius = '20px';
   msg.style.color: '#fff';
   msg.style.fontSize: '2em';
   msg.style.zIndex: '999';

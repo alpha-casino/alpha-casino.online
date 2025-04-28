@@ -2,33 +2,53 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Arial', sans-serif;
-  background: url('background.jpg') no-repeat center center fixed;
-  background-size: cover;
+  font-family: 'Russo One', sans-serif;
+  background: linear-gradient(135deg, #1a0023, #450045, #61006b);
+  background-size: 400% 400%;
+  animation: gradientMove 20s ease infinite;
   color: #fff;
   overflow-x: hidden;
-  animation: shine 30s linear infinite;
-  background-blend-mode: screen;
+}
+
+/* Splash Screen */
+.splash-screen {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: #000;
+  color: gold;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 2em;
+  z-index: 10000;
+  animation: fadeIn 1s forwards;
+}
+
+.splash-title {
+  font-size: 3em;
+  margin-bottom: 20px;
 }
 
 /* Заголовки */
 h1.main-title {
-  margin-top: 20px;
+  margin-top: 30px;
   text-align: center;
   font-size: 3em;
   color: gold;
-  text-shadow: 2px 2px 8px #000;
+  text-shadow: 2px 2px 10px #000;
 }
 
 .welcome-message {
   text-align: center;
   font-size: 1.5em;
-  margin-top: 15px;
-  color: #ffd700;
+  margin-top: 20px;
+  color: #ffcc00;
   animation: fadeIn 2s ease-in-out;
 }
 
-/* Музыка */
+/* Управление музыкой */
 .music-control {
   position: fixed;
   top: 15px;
@@ -46,112 +66,115 @@ h1.main-title {
   background: gold;
   color: black;
   padding: 10px 20px;
-  border-radius: 20px;
+  border-radius: 25px;
   font-weight: bold;
-  box-shadow: 0 0 15px gold;
+  box-shadow: 0 0 20px gold;
   z-index: 999;
+  font-size: 1.2em;
 }
 
 /* Слот-машина */
 .slot-machine {
-  background: rgba(0, 0, 0, 0.7);
-  margin: 30px auto;
-  padding: 30px;
+  background: rgba(0, 0, 0, 0.8);
+  margin: 40px auto;
+  padding: 40px 20px;
   border-radius: 20px;
   width: 90%;
   max-width: 700px;
   text-align: center;
-  box-shadow: 0 0 20px #ffd700;
+  box-shadow: 0 0 30px gold;
 }
 
 .balance, .bet {
-  font-size: 1.4em;
-  margin-bottom: 15px;
+  font-size: 1.5em;
+  margin-bottom: 20px;
 }
 
-.bet input {
-  padding: 10px;
-  border-radius: 10px;
-  width: 100px;
-  text-align: center;
-  font-size: 1.2em;
+.bet input[type="range"] {
+  width: 60%;
 }
 
-/* Сами барабаны */
+#betDisplay {
+  font-weight: bold;
+  color: #ffd700;
+}
+
+/* Барабаны */
 .slots {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 20px 0;
-  gap: 15px;
+  margin: 30px 0;
+  gap: 20px;
 }
 
 .slot {
-  background: rgba(255, 215, 0, 0.2);
+  background: rgba(255, 215, 0, 0.3);
   border: 2px solid gold;
-  width: 80px;
-  height: 80px;
+  width: 90px;
+  height: 90px;
   border-radius: 10px;
-  font-size: 2.5em;
+  font-size: 2.8em;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 0 10px gold;
-  transition: transform 0.3s;
+  box-shadow: 0 0 15px gold;
+  transition: transform 0.4s;
 }
 
 /* Кнопка СТАРТ */
 #spinButton {
-  background: gold;
+  background: linear-gradient(45deg, gold, #ffd700);
   border: none;
-  padding: 15px 30px;
-  font-size: 1.5em;
-  border-radius: 15px;
+  padding: 15px 40px;
+  font-size: 1.7em;
+  border-radius: 20px;
   color: black;
   cursor: pointer;
-  transition: 0.3s;
+  transition: 0.4s;
   animation: blink 2s infinite;
 }
 
 #spinButton:hover {
   background: #ffcc00;
-  box-shadow: 0 0 10px gold;
+  box-shadow: 0 0 15px gold;
 }
 
 /* Кнопки управления */
 .auth-buttons {
-  margin-top: 20px;
+  margin-top: 30px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 15px;
+  gap: 20px;
 }
 
 .auth-buttons button {
-  background: #3498db;
+  background: #2980b9;
   border: none;
-  padding: 10px 20px;
-  font-size: 1em;
-  border-radius: 10px;
+  padding: 12px 25px;
+  font-size: 1.2em;
+  border-radius: 12px;
   color: white;
   cursor: pointer;
-  transition: 0.3s;
+  transition: 0.4s;
 }
 
 .auth-buttons button:hover {
-  background: #2980b9;
+  background: #3498db;
 }
 
-/* Секции */
+/* Разделы */
 section {
-  padding: 50px 20px;
+  padding: 60px 20px;
   text-align: center;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.7);
   margin: 30px 0;
   border-radius: 20px;
   width: 90%;
   margin-left: auto;
   margin-right: auto;
+  box-shadow: 0 0 15px #ffd700;
 }
 
 section h2 {
@@ -162,23 +185,17 @@ section h2 {
 
 .promotion-item {
   margin: 10px 0;
-  font-size: 1.2em;
+  font-size: 1.3em;
 }
 
-.faq-item {
-  margin: 20px 0;
-}
-
-/* Модальные окна */
+/* Модалки */
 .modal {
   display: none;
   position: fixed;
-  top: 0;
-  left: 0;
+  top: 0; left: 0;
   background: rgba(0,0,0,0.8);
   backdrop-filter: blur(5px);
-  width: 100%;
-  height: 100%;
+  width: 100%; height: 100%;
   justify-content: center;
   align-items: center;
   z-index: 10000;
@@ -191,7 +208,7 @@ section h2 {
   width: 90%;
   max-width: 500px;
   text-align: center;
-  box-shadow: 0 0 20px gold;
+  box-shadow: 0 0 25px gold;
 }
 
 .modal-content input {
@@ -212,6 +229,7 @@ section h2 {
   background: #3498db;
   color: white;
   cursor: pointer;
+  transition: 0.3s;
 }
 
 .modal-content button:hover {
@@ -222,10 +240,9 @@ section h2 {
   background: gold;
   color: black;
   padding: 10px 20px;
-  margin-bottom: 15px;
   border-radius: 10px;
+  margin-top: 10px;
   cursor: pointer;
-  border: none;
 }
 
 .copy-button:hover {
@@ -236,19 +253,14 @@ section h2 {
   margin-top: 20px;
   cursor: pointer;
   color: gold;
-  font-size: 1.2em;
+  font-size: 1.3em;
 }
 
 /* Анимации */
-@keyframes shine {
+@keyframes gradientMove {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
-}
-
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
 }
 
 @keyframes fadeIn {
@@ -256,23 +268,28 @@ section h2 {
   to { opacity: 1; }
 }
 
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
 /* Адаптив */
 @media (max-width: 600px) {
   .slot-machine {
     width: 95%;
-    padding: 20px;
+    padding: 25px;
   }
   .slots {
-    gap: 8px;
+    gap: 10px;
   }
   .slot {
-    width: 60px;
-    height: 60px;
-    font-size: 2em;
+    width: 65px;
+    height: 65px;
+    font-size: 2.2em;
   }
   #spinButton {
-    padding: 12px 20px;
-    font-size: 1.2em;
+    padding: 12px 25px;
+    font-size: 1.3em;
   }
   .auth-buttons {
     flex-direction: column;

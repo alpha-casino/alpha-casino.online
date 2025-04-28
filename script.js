@@ -3,6 +3,7 @@ let user = JSON.parse(localStorage.getItem('casinoUser')) || null;
 let balance = user ? user.balance : (localStorage.getItem('casinoBalance') ? parseInt(localStorage.getItem('casinoBalance')) : 500);
 let musicPlaying = false;
 const symbols = ['🍒', '🍋', '🍉', '🍇', '💎', '🔔', '⭐', '7️⃣', '🍀'];
+let running = [false, false, false, false, false];
 const slots = [
   document.getElementById('slot1'),
   document.getElementById('slot2'),
@@ -25,7 +26,7 @@ updateUserInfo();
 function setupMusicControl() {
   const musicControl = document.getElementById('musicControl');
   if (!musicControl) return;
-  
+
   function toggleMusic() {
     if (musicPlaying) {
       music.pause();
@@ -105,8 +106,8 @@ function startSpin() {
   updateBalanceDisplay();
   disableSpinButton();
 
-  let running = [true, true, true, true, true];
-  let stopDelays = [1500, 2000, 2500, 3000, 3500];
+  running = [true, true, true, true, true];
+  const stopDelays = [1500, 2000, 2500, 3000, 3500];
 
   for (let i = 0; i < slots.length; i++) {
     spinSlot(i);
@@ -120,7 +121,7 @@ function startSpin() {
 
 function spinSlot(index) {
   function animate() {
-    if (slots[index] && running[index]) {
+    if (running[index]) {
       slots[index].innerText = symbols[Math.floor(Math.random() * symbols.length)];
       requestAnimationFrame(animate);
     }
@@ -217,12 +218,12 @@ function showWinMessage(amount) {
   msg.style.top = '30%';
   msg.style.left = '50%';
   msg.style.transform = 'translate(-50%, -50%)';
-  msg.style.background = '#4caf50';
-  msg.style.padding = '20px 40px';
+  msg.style.background: '#4caf50';
+  msg.style.padding: '20px 40px';
   msg.style.borderRadius: '20px';
   msg.style.color: '#fff';
   msg.style.fontSize: '2em';
-  msg.style.zIndex = '999';
+  msg.style.zIndex: '999';
   msg.innerText = `Вітаємо! Ви виграли ${amount} грн!`;
   document.body.appendChild(msg);
   setTimeout(() => document.body.removeChild(msg), 3000);
@@ -239,6 +240,10 @@ function openRegistration() {
 
 function openLogin() {
   document.getElementById('loginModal').style.display = 'flex';
+}
+
+function openProfile() {
+  alert('Профіль ще в розробці.');
 }
 
 function closeModal() {
@@ -312,7 +317,7 @@ function confirmRecharge() {
   }
 }
 
-// Джекпот таймер
+// Таймер Джекпота
 let minutes = 30;
 let seconds = 0;
 

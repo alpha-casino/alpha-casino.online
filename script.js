@@ -39,7 +39,7 @@ function startupCheck() {
   if (!user || balance <= 0 || isCorruptData()) {
     localStorage.clear();
     setTimeout(() => {
-      openRegistration(); // Открываем окно регистрации
+      openRegistration(); // Открыть регистрацию если нет пользователя или 0 баланс
     }, 300);
   } else {
     updateUserInfo();
@@ -47,6 +47,8 @@ function startupCheck() {
     setupMusicControl();
     startJackpotTimer();
     enableSpinButton();
+    document.getElementById('headerButtons').style.display = 'none';
+    document.getElementById('authButtons').style.display = 'flex';
   }
 }
 
@@ -75,7 +77,7 @@ function setupMusicControl() {
   });
 }
 
-// Обновить баланс на сайте
+// Обновить баланс
 function updateBalanceDisplay() {
   document.getElementById('balance').innerText = balance;
   localStorage.setItem('casinoBalance', balance);
@@ -83,6 +85,13 @@ function updateBalanceDisplay() {
     disableSpinButton();
   } else {
     enableSpinButton();
+  }
+}
+
+// Обновить информацию о пользователе
+function updateUserInfo() {
+  if (user) {
+    document.getElementById('user-info').innerText = `Вітаємо, ${user.name}!`;
   }
 }
 
@@ -164,14 +173,14 @@ function celebrateWin(amount) {
   showWinMessage(amount);
 }
 
-// Эффект вибрации
+// Вибрация выигрыша
 function vibrateWin() {
   if (navigator.vibrate) {
     navigator.vibrate([300, 200, 300]);
   }
 }
 
-// Эффект салюта
+// Салют на экране
 function launchFireworks() {
   for (let i = 0; i < 25; i++) {
     const firework = document.createElement('div');
@@ -189,7 +198,7 @@ function launchFireworks() {
   }
 }
 
-// Показ короны при выигрыше
+// Корона выигрыша
 function showCrown() {
   const crown = document.createElement('div');
   crown.innerText = '👑';
@@ -219,7 +228,7 @@ function flashScreen(color) {
   setTimeout(() => { document.body.removeChild(flash); }, 500);
 }
 
-// Показ сообщения о выигрыше
+// Сообщение о выигрыше
 function showWinMessage(amount) {
   const msg = document.createElement('div');
   msg.style.position = 'fixed';
@@ -228,7 +237,7 @@ function showWinMessage(amount) {
   msg.style.transform = 'translate(-50%, -50%)';
   msg.style.background = '#4caf50';
   msg.style.padding = '20px 40px';
-  msg.style.borderRadius = '20px';
+  msg.style.border-radius: 20px;
   msg.style.color = '#fff';
   msg.style.fontSize = '2em';
   msg.style.zIndex = '999';
@@ -257,6 +266,10 @@ function openRegistration() {
   document.getElementById('registrationModal').style.display = 'flex';
 }
 
+function openLogin() {
+  document.getElementById('loginModal').style.display = 'flex';
+}
+
 function completeRegistration() {
   const name = document.getElementById('profileName').value.trim();
   const email = document.getElementById('emailAddress').value.trim();
@@ -267,6 +280,7 @@ function completeRegistration() {
     user = { name, email, password, wallet, balance };
     localStorage.setItem('casinoUser', JSON.stringify(user));
     document.getElementById('authButtons').style.display = 'flex';
+    document.getElementById('headerButtons').style.display = 'none';
     updateUserInfo();
     closeModal();
     alert('Реєстрація успішна! Вам нараховано бонус 100 грн!');
@@ -287,6 +301,7 @@ function login() {
     balance = user.balance;
     updateBalanceDisplay();
     document.getElementById('authButtons').style.display = 'flex';
+    document.getElementById('headerButtons').style.display = 'none';
     updateUserInfo();
     closeModal();
     alert('Вхід успішний!');
@@ -302,6 +317,7 @@ function logout() {
   balance = 500;
   updateBalanceDisplay();
   document.getElementById('authButtons').style.display = 'none';
+  document.getElementById('headerButtons').style.display = 'flex';
   document.getElementById('user-info').innerText = '';
   alert('Ви вийшли з акаунта.');
 }

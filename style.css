@@ -26,7 +26,7 @@ body {
 
 .nav {
   display: flex;
-  gap: 15px;
+  gap: 10px;
 }
 
 .nav-btn {
@@ -44,7 +44,7 @@ body {
   background: gold;
 }
 
-/* Таймер джекпота */
+/* Таймер Джекпота */
 .jackpot-timer {
   margin: 20px auto;
   background: gold;
@@ -120,7 +120,7 @@ body {
   50% {opacity: 0.6;}
 }
 
-/* Секции */
+/* Секции бонуси, VIP клуб, турнір, новини */
 section {
   margin: 40px auto;
   padding: 20px;

@@ -1,6 +1,6 @@
 // Переменные
 let user = JSON.parse(localStorage.getItem('casinoUser')) || null;
-let balance = user ? user.balance : (localStorage.getItem('casinoBalance') ? parseInt(localStorage.getItem('casinoBalance')) : 0);
+let balance = user ? user.balance : (localStorage.getItem('casinoBalance') ? parseInt(localStorage.getItem('casinoBalance')) : 500);
 let musicPlaying = false;
 const symbols = ['🍒', '🍋', '🍉', '🍇', '💎', '🔔', '⭐', '7️⃣', '🍀'];
 const slots = [
@@ -18,11 +18,23 @@ music.volume = 0.2;
 updateBalanceDisplay();
 setupMusicControl();
 startJackpotTimer();
-updateUserInfo();
 checkZeroBalanceOnLoad();
+updateUserInfo();
 
 // Управление музыкой
 function setupMusicControl() {
+  const musicControl = document.getElementById('musicControl');
+  if (!musicControl) return;
+  
+  function toggleMusic() {
+    if (musicPlaying) {
+      music.pause();
+    } else {
+      music.play();
+    }
+    musicPlaying = !musicPlaying;
+  }
+
   document.addEventListener('click', () => {
     if (!musicPlaying) {
       music.play();
@@ -30,29 +42,38 @@ function setupMusicControl() {
     }
   }, { once: true });
 
-  musicControl.addEventListener('click', () => {
-    if (musicPlaying) {
-      music.pause();
-    } else {
+  document.addEventListener('touchstart', () => {
+    if (!musicPlaying) {
       music.play();
+      musicPlaying = true;
     }
-    musicPlaying = !musicPlaying;
-  });
+  }, { once: true });
+
+  musicControl.addEventListener('click', toggleMusic);
+  musicControl.addEventListener('touchstart', toggleMusic);
 }
 
 // Обновить баланс
 function updateBalanceDisplay() {
+  if (isNaN(balance) || balance < 0) {
+    balance = 0;
+  }
   document.getElementById('balance').innerText = balance;
-  localStorage.setItem('casinoBalance', balance);
+  if (user) {
+    user.balance = balance;
+    localStorage.setItem('casinoUser', JSON.stringify(user));
+  } else {
+    localStorage.setItem('casinoBalance', balance);
+  }
+
   if (balance <= 0) {
     disableSpinButton();
-    showOutOfMoneyMessage();
   } else {
     enableSpinButton();
   }
 }
 
-// Отключить/включить кнопку СТАРТ
+// Отключить/включить кнопку
 function disableSpinButton() {
   document.getElementById('spinButton').disabled = true;
 }
@@ -61,22 +82,21 @@ function enableSpinButton() {
   document.getElementById('spinButton').disabled = false;
 }
 
-// Показывать сообщение о недостаточности средств
-function showOutOfMoneyMessage() {
-  document.getElementById('outOfMoneyModal').style.display = 'flex';
-}
-
 // Проверка баланса при загрузке
 function checkZeroBalanceOnLoad() {
-  if (balance <= 0 && !user) {
-    setTimeout(openRegistration, 500);
+  if (balance <= 0) {
+    if (!user) {
+      openRegistration();
+    } else {
+      recharge();
+    }
   }
 }
 
 // Запуск крутки
 function startSpin() {
   const bet = parseInt(document.getElementById('betAmount').value);
-  if (bet > balance) {
+  if (isNaN(bet) || bet > balance) {
     alert('Недостатньо коштів для ставки!');
     return;
   }
@@ -90,25 +110,22 @@ function startSpin() {
 
   for (let i = 0; i < slots.length; i++) {
     spinSlot(i);
-
-    setTimeout(() => {
-      running[i] = false;
-    }, stopDelays[i]);
-  }
-
-  function spinSlot(index) {
-    function animate() {
-      if (running[index]) {
-        slots[index].innerText = symbols[Math.floor(Math.random() * symbols.length)];
-        requestAnimationFrame(animate);
-      }
-    }
-    animate();
+    setTimeout(() => { running[i] = false; }, stopDelays[i]);
   }
 
   setTimeout(() => {
     checkWin(bet);
   }, Math.max(...stopDelays) + 500);
+}
+
+function spinSlot(index) {
+  function animate() {
+    if (slots[index] && running[index]) {
+      slots[index].innerText = symbols[Math.floor(Math.random() * symbols.length)];
+      requestAnimationFrame(animate);
+    }
+  }
+  animate();
 }
 
 // Проверка выигрыша
@@ -122,15 +139,19 @@ function checkWin(bet) {
     balance += winAmount;
     updateBalanceDisplay();
     celebrateWin(winAmount);
-  } else if (balance <= 0 && !user) {
-    setTimeout(openRegistration, 500);
-  } else {
-    updateBalanceDisplay();
+  }
+
+  if (balance <= 0) {
+    if (!user) {
+      openRegistration();
+    } else {
+      recharge();
+    }
   }
   enableSpinButton();
 }
 
-// Празднование победы
+// Победа
 function celebrateWin(amount) {
   flashScreen('white');
   vibrateWin();
@@ -139,14 +160,28 @@ function celebrateWin(amount) {
   showWinMessage(amount);
 }
 
-// Вибрация
+// Эффекты
 function vibrateWin() {
   if (navigator.vibrate) {
     navigator.vibrate([300, 200, 300]);
   }
 }
 
-// Салют
+function flashScreen(color) {
+  const flash = document.createElement('div');
+  flash.style.position = 'fixed';
+  flash.style.top = '0';
+  flash.style.left = '0';
+  flash.style.width = '100%';
+  flash.style.height = '100%';
+  flash.style.backgroundColor = color;
+  flash.style.opacity = '0.7';
+  flash.style.zIndex = '9999';
+  flash.style.animation = 'flash 0.5s forwards';
+  document.body.appendChild(flash);
+  setTimeout(() => document.body.removeChild(flash), 500);
+}
+
 function launchFireworks() {
   for (let i = 0; i < 20; i++) {
     const firework = document.createElement('div');
@@ -164,7 +199,6 @@ function launchFireworks() {
   }
 }
 
-// Корона
 function showCrown() {
   const crown = document.createElement('div');
   crown.innerText = '👑';
@@ -175,28 +209,9 @@ function showCrown() {
   crown.style.fontSize = '6em';
   crown.style.zIndex = '999';
   document.body.appendChild(crown);
-  setTimeout(() => {
-    document.body.removeChild(crown);
-  }, 2000);
+  setTimeout(() => document.body.removeChild(crown), 2000);
 }
 
-// Мигание экрана
-function flashScreen(color) {
-  const flash = document.createElement('div');
-  flash.style.position = 'fixed';
-  flash.style.top = '0';
-  flash.style.left = '0';
-  flash.style.width = '100%';
-  flash.style.height = '100%';
-  flash.style.backgroundColor = color;
-  flash.style.opacity = '0.7';
-  flash.style.zIndex = '9999';
-  flash.style.animation = 'flash 0.5s forwards';
-  document.body.appendChild(flash);
-  setTimeout(() => document.body.removeChild(flash), 500);
-}
-
-// Сообщение о выигрыше
 function showWinMessage(amount) {
   const msg = document.createElement('div');
   msg.style.position = 'fixed';
@@ -211,22 +226,20 @@ function showWinMessage(amount) {
   msg.style.zIndex = '999';
   msg.innerText = `Вітаємо! Ви виграли ${amount} грн!`;
   document.body.appendChild(msg);
-  setTimeout(() => {
-    document.body.removeChild(msg);
-  }, 3000);
+  setTimeout(() => document.body.removeChild(msg), 3000);
 }
 
-// Модалки
+// Модальные окна
 function recharge() {
   document.getElementById('paymentModal').style.display = 'flex';
 }
 
-function confirmRecharge() {
-  document.getElementById('confirmationMessage').innerText = 'Очікуємо зарахування на баланс.';
-}
-
 function openRegistration() {
   document.getElementById('registrationModal').style.display = 'flex';
+}
+
+function closeModal() {
+  document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
 }
 
 function completeRegistration() {
@@ -237,59 +250,23 @@ function completeRegistration() {
   if (name && email && wallet) {
     user = { name, email, wallet, balance };
     localStorage.setItem('casinoUser', JSON.stringify(user));
-    document.getElementById('authButtons').style.display = 'flex';
-    updateUserInfo();
     closeModal();
-    alert('Акаунт створено успішно!');
-    openOutOfMoneyModal();
+    alert('Акаунт створено успішно! Тепер поповніть баланс.');
+    recharge();
   } else {
     alert('Будь ласка, заповніть усі поля!');
   }
 }
 
-function login() {
-  const email = document.getElementById('loginEmail').value.trim();
-  const savedUser = JSON.parse(localStorage.getItem('casinoUser'));
-
-  if (savedUser && savedUser.email === email) {
-    user = savedUser;
-    balance = user.balance;
-    updateBalanceDisplay();
-    document.getElementById('authButtons').style.display = 'flex';
-    updateUserInfo();
-    closeModal();
-    alert('Вхід успішний!');
-  } else {
-    alert('Невірні дані для входу!');
-  }
+// Копирование адреса кошелька
+function copyWallet() {
+  const walletText = document.getElementById('walletAddressText').innerText;
+  navigator.clipboard.writeText(walletText).then(() => {
+    alert('Адресу скопійовано!');
+  });
 }
 
-function logout() {
-  localStorage.removeItem('casinoUser');
-  localStorage.setItem('casinoBalance', 500);
-  user = null;
-  balance = 500;
-  updateBalanceDisplay();
-  document.getElementById('authButtons').style.display = 'none';
-  document.getElementById('user-info').innerText = '';
-  alert('Ви вийшли з акаунта!');
-}
-
-function openProfile() {
-  if (user) {
-    document.getElementById('profileNameDisplay').innerText = `Нікнейм: ${user.name}`;
-    document.getElementById('profileEmailDisplay').innerText = `Email: ${user.email}`;
-    document.getElementById('profileWalletDisplay').innerText = `Гаманець USDT: ${user.wallet}`;
-    document.getElementById('profileBalanceDisplay').innerText = `Баланс: ${balance} грн`;
-    document.getElementById('profileModal').style.display = 'flex';
-  }
-}
-
-function closeModal() {
-  document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
-}
-
-// Перевод USDT ➔ грн
+// Конвертация USDT в грн
 function calculateUAH() {
   const usdt = parseFloat(document.getElementById('usdtAmount').value);
   if (!isNaN(usdt)) {
@@ -300,7 +277,7 @@ function calculateUAH() {
   }
 }
 
-// Таймер джекпота
+// Таймер Джекпота
 let minutes = 30;
 let seconds = 0;
 
@@ -320,12 +297,4 @@ function startJackpotTimer() {
     }
     document.getElementById('jackpotTimer').innerText = `Джекпот через: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   }, 1000);
-}
-
-// Копирование адреса кошелька
-function copyWallet() {
-  const walletText = document.getElementById('walletAddressText').innerText;
-  navigator.clipboard.writeText(walletText).then(() => {
-    alert('Адресу скопійовано!');
-  });
 }

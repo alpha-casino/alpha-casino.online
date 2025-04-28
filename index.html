@@ -3,15 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Альфа Казино – Онлайн Казино Україна</title>
-  <meta name="description" content="Альфа Казино — реальне українське онлайн казино. Грай у слоти, вигравай джекпоти, отримуй бонуси!">
-  <meta name="keywords" content="онлайн казино, слоти на гроші, ігрові автомати, казино Україна, Альфа Казино, реєстрація, бонуси, турніри, VIP програма, швидкі виплати">
+  <title>AlfaCasino – Онлайн Казино Україна</title>
+  <meta name="description" content="AlfaCasino — реальне українське онлайн казино. Грай у слоти, вигравай джекпоти, отримуй бонуси!">
+  <meta name="keywords" content="онлайн казино, слоти, азартні ігри, AlfaCasino, реєстрація, бонуси, турніри, виплати">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+<!-- Шапка -->
 <header class="header">
-  <div class="logo">🎰 Альфа Казино</div>
+  <div class="logo">AlfaCasino</div>
   <nav class="nav">
     <button onclick="openLogin()" class="nav-btn">Вхід</button>
     <button onclick="openRegistration()" class="nav-btn">Реєстрація</button>
@@ -19,13 +20,16 @@
   </nav>
 </header>
 
-<div id="musicControl" class="music-control">🎵</div>
-<div id="jackpotTimer" class="jackpot-timer">Джекпот через: 30:00</div>
-
 <main class="main-content">
+
+  <!-- Таймер Джекпота -->
+  <div id="jackpotTimer" class="jackpot-timer">Джекпот через: 30:00</div>
+
+  <!-- Баланс и ставка -->
   <div class="balance">Баланс: <span id="balance">500</span> грн</div>
   <div class="bet">Ставка: <input type="number" id="betAmount" value="10" min="10" step="10"> грн</div>
 
+  <!-- Слоты -->
   <div class="slots" id="slots">
     <div class="slot" id="slot1">🎰</div>
     <div class="slot" id="slot2">🎰</div>
@@ -40,24 +44,28 @@
     <button onclick="recharge()">Поповнити баланс</button>
     <button onclick="logout()">Вийти</button>
   </div>
+
 </main>
 
+<!-- Бонуси -->
 <section class="bonus-section">
-  <h2>Бонуси</h2>
-  <p>🎁 100% бонус за перше поповнення!</p>
-  <p>🎁 50% бонус за друге поповнення!</p>
-  <p>🎁 150% бонус на VIP депозит!</p>
+  <h2>Бонуси за поповнення</h2>
+  <p>🎁 100% бонус на перший депозит!</p>
+  <p>🎁 50% бонус на другий депозит!</p>
+  <p>🎁 150% VIP бонус для гравців клубу!</p>
 </section>
 
+<!-- VIP Клуб -->
 <section class="vip-section">
   <h2>VIP Клуб</h2>
-  <div class="vip-level">🥉 Бронзовий рівень: бонуси +5%</div>
-  <div class="vip-level">🥈 Срібний рівень: бонуси +10%</div>
-  <div class="vip-level">🥇 Золотий рівень: бонуси +15%</div>
-  <div class="vip-level">🏆 Платиновий рівень: бонуси +20%</div>
-  <div class="vip-level">💎 Діамантовий рівень: бонуси +30%</div>
+  <div class="vip-level">🥉 Бронза: бонуси +5%</div>
+  <div class="vip-level">🥈 Срібло: бонуси +10%</div>
+  <div class="vip-level">🥇 Золото: бонуси +15%</div>
+  <div class="vip-level">🏆 Платина: бонуси +20%</div>
+  <div class="vip-level">💎 Діамант: бонуси +30%</div>
 </section>
 
+<!-- Турнірна таблиця -->
 <section class="tournament-section">
   <h2>Турнірна таблиця</h2>
   <table class="tournament-table">
@@ -78,13 +86,15 @@
   </table>
 </section>
 
+<!-- Стрічка новин -->
 <section class="news-section">
   <h2>Стрічка новин</h2>
-  <div class="news-item">🔥 PlayerX виграв ₴50,000 на слоті "Mega Diamonds"!</div>
-  <div class="news-item">🔥 LuckyStar забрав джекпот ₴36,000!</div>
+  <div class="news-item">🔥 PlayerX виграв ₴50,000 у слоті "Mega Diamonds"!</div>
+  <div class="news-item">🔥 LuckyStar зірвав джекпот ₴36,000!</div>
   <div class="news-item">🔥 BigBoss виграв ₴30,700 на рулетці!</div>
 </section>
 
+<!-- Кращі гравці тижня -->
 <section class="top-players-section">
   <h2>Кращі гравці тижня</h2>
   <div class="player-list">
@@ -100,7 +110,7 @@
     <h2>Реєстрація</h2>
     <input type="text" id="profileName" placeholder="Нікнейм">
     <input type="email" id="emailAddress" placeholder="Email">
-    <input type="text" id="walletAddress" placeholder="Ваш гаманець USDT">
+    <input type="text" id="walletAddress" placeholder="Гаманець USDT">
     <button onclick="completeRegistration()">Створити акаунт</button>
     <div class="close" onclick="closeModal()">✖</div>
   </div>

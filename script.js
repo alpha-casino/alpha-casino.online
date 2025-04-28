@@ -21,7 +21,7 @@ startJackpotTimer();
 checkZeroBalanceOnLoad();
 updateUserInfo();
 
-// Управление музыкой
+// Музыка
 function setupMusicControl() {
   const musicControl = document.getElementById('musicControl');
   if (!musicControl) return;
@@ -73,7 +73,7 @@ function updateBalanceDisplay() {
   }
 }
 
-// Отключить/включить кнопку
+// Кнопки
 function disableSpinButton() {
   document.getElementById('spinButton').disabled = true;
 }
@@ -93,11 +93,11 @@ function checkZeroBalanceOnLoad() {
   }
 }
 
-// Запуск крутки
+// Крутка слотов
 function startSpin() {
   const bet = parseInt(document.getElementById('betAmount').value);
-  if (isNaN(bet) || bet > balance) {
-    alert('Недостатньо коштів для ставки!');
+  if (isNaN(bet) || bet > balance || bet <= 0) {
+    alert('Недостатньо коштів або некоректна ставка!');
     return;
   }
 
@@ -151,7 +151,7 @@ function checkWin(bet) {
   enableSpinButton();
 }
 
-// Победа
+// Эффекты при выигрыше
 function celebrateWin(amount) {
   flashScreen('white');
   vibrateWin();
@@ -160,7 +160,6 @@ function celebrateWin(amount) {
   showWinMessage(amount);
 }
 
-// Эффекты
 function vibrateWin() {
   if (navigator.vibrate) {
     navigator.vibrate([300, 200, 300]);
@@ -220,22 +219,26 @@ function showWinMessage(amount) {
   msg.style.transform = 'translate(-50%, -50%)';
   msg.style.background = '#4caf50';
   msg.style.padding = '20px 40px';
-  msg.style.borderRadius = '20px';
-  msg.style.color = '#fff';
-  msg.style.fontSize = '2em';
+  msg.style.borderRadius: '20px';
+  msg.style.color: '#fff';
+  msg.style.fontSize: '2em';
   msg.style.zIndex = '999';
   msg.innerText = `Вітаємо! Ви виграли ${amount} грн!`;
   document.body.appendChild(msg);
   setTimeout(() => document.body.removeChild(msg), 3000);
 }
 
-// Модальные окна
+// Модалки
 function recharge() {
   document.getElementById('paymentModal').style.display = 'flex';
 }
 
 function openRegistration() {
   document.getElementById('registrationModal').style.display = 'flex';
+}
+
+function openLogin() {
+  document.getElementById('loginModal').style.display = 'flex';
 }
 
 function closeModal() {
@@ -251,14 +254,34 @@ function completeRegistration() {
     user = { name, email, wallet, balance };
     localStorage.setItem('casinoUser', JSON.stringify(user));
     closeModal();
-    alert('Акаунт створено успішно! Тепер поповніть баланс.');
+    alert('Акаунт створено! Тепер поповніть баланс.');
     recharge();
+    document.getElementById('profileButton').style.display = 'inline-block';
   } else {
     alert('Будь ласка, заповніть усі поля!');
   }
 }
 
-// Копирование адреса кошелька
+function login() {
+  const email = document.getElementById('loginEmail').value.trim();
+  if (user && email === user.email) {
+    closeModal();
+    alert('Вхід успішний!');
+    document.getElementById('profileButton').style.display = 'inline-block';
+  } else {
+    alert('Невірний email!');
+  }
+}
+
+function logout() {
+  localStorage.removeItem('casinoUser');
+  user = null;
+  balance = 500;
+  updateBalanceDisplay();
+  alert('Ви вийшли з акаунта.');
+  document.getElementById('profileButton').style.display = 'none';
+}
+
 function copyWallet() {
   const walletText = document.getElementById('walletAddressText').innerText;
   navigator.clipboard.writeText(walletText).then(() => {
@@ -266,18 +289,30 @@ function copyWallet() {
   });
 }
 
-// Конвертация USDT в грн
 function calculateUAH() {
   const usdt = parseFloat(document.getElementById('usdtAmount').value);
   if (!isNaN(usdt)) {
     const uah = usdt * 42;
-    document.getElementById('uahResult').innerText = `Ви отримаєте ${uah} грн.`;
+    document.getElementById('uahResult').innerText = `Отримаєте ${uah} грн.`;
   } else {
     document.getElementById('uahResult').innerText = '';
   }
 }
 
-// Таймер Джекпота
+function confirmRecharge() {
+  const usdtAmount = parseFloat(document.getElementById('usdtAmount').value);
+  if (!isNaN(usdtAmount) && usdtAmount > 0) {
+    const uah = usdtAmount * 42;
+    balance += uah;
+    updateBalanceDisplay();
+    closeModal();
+    alert(`Баланс поповнено на ${uah} грн!`);
+  } else {
+    alert('Введіть коректну суму USDT!');
+  }
+}
+
+// Джекпот таймер
 let minutes = 30;
 let seconds = 0;
 

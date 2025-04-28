@@ -1,4 +1,4 @@
-/* Базовые стили */
+/* Общие стили */
 body {
   margin: 0;
   font-family: 'Arial', sans-serif;
@@ -14,10 +14,13 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  z-index: 100;
+  position: relative;
 }
 
 .logo {
-  font-size: 1.8em;
+  font-size: 2em;
+  font-weight: bold;
   color: gold;
 }
 
@@ -41,34 +44,22 @@ body {
   background: gold;
 }
 
-/* Музыка */
-.music-control {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  font-size: 2em;
-  cursor: pointer;
-  z-index: 1000;
-}
-
 /* Таймер джекпота */
 .jackpot-timer {
-  position: fixed;
-  top: 20px;
-  right: 20px;
+  margin: 20px auto;
   background: gold;
   color: black;
   padding: 10px 20px;
   border-radius: 20px;
   font-weight: bold;
-  box-shadow: 0 0 15px gold;
-  z-index: 999;
+  box-shadow: 0 0 10px gold;
+  width: fit-content;
 }
 
-/* Основной блок */
+/* Основной контент */
 .main-content {
   text-align: center;
-  margin-top: 60px;
+  margin-top: 40px;
 }
 
 .balance, .bet {
@@ -165,14 +156,14 @@ h2 {
   text-align: center;
 }
 
-/* Лента новостей */
+/* Стрічка новин */
 .news-item {
   background: rgba(255, 215, 0, 0.2);
   padding: 10px;
   border-radius: 10px;
 }
 
-/* Топ-гравці */
+/* Кращі гравці */
 .player-list {
   display: flex;
   flex-wrap: wrap;

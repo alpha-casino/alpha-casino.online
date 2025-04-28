@@ -1,85 +1,89 @@
-/* Общие стили */
+/* Базовые настройки */
 body {
   margin: 0;
+  padding: 0;
   font-family: 'Arial', sans-serif;
-  background: linear-gradient(45deg, #0a0a0a, #1a1a1a);
+  background: url('background.jpg') no-repeat center center fixed;
+  background-size: cover;
   color: #fff;
   overflow-x: hidden;
+  animation: shine 30s linear infinite;
+  background-blend-mode: screen;
 }
 
-/* Шапка */
-.header {
-  background: #111;
-  padding: 15px 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
-  z-index: 100;
-}
-
-.logo {
-  font-size: 2em;
-  font-weight: bold;
+/* Заголовки */
+h1.main-title {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 3em;
   color: gold;
+  text-shadow: 2px 2px 8px #000;
 }
 
-.nav {
-  display: flex;
-  gap: 10px;
+.welcome-message {
+  text-align: center;
+  font-size: 1.5em;
+  margin-top: 15px;
+  color: #ffd700;
+  animation: fadeIn 2s ease-in-out;
 }
 
-.nav-btn {
-  background: #ffcc00;
-  color: black;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 10px;
-  font-weight: bold;
+/* Музыка */
+.music-control {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  font-size: 2em;
   cursor: pointer;
-  transition: 0.3s;
+  z-index: 9999;
 }
 
-.nav-btn:hover {
-  background: gold;
-}
-
-/* Таймер Джекпота */
+/* Таймер джекпота */
 .jackpot-timer {
-  margin: 20px auto;
+  position: fixed;
+  top: 15px;
+  right: 15px;
   background: gold;
   color: black;
   padding: 10px 20px;
   border-radius: 20px;
   font-weight: bold;
-  box-shadow: 0 0 10px gold;
-  width: fit-content;
+  box-shadow: 0 0 15px gold;
+  z-index: 999;
 }
 
-/* Основной контент */
-.main-content {
+/* Слот-машина */
+.slot-machine {
+  background: rgba(0, 0, 0, 0.7);
+  margin: 30px auto;
+  padding: 30px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 700px;
   text-align: center;
-  margin-top: 40px;
+  box-shadow: 0 0 20px #ffd700;
 }
 
 .balance, .bet {
-  margin: 10px;
-  font-size: 1.5em;
+  font-size: 1.4em;
+  margin-bottom: 15px;
 }
 
 .bet input {
   padding: 10px;
-  width: 100px;
-  font-size: 1em;
   border-radius: 10px;
-  border: none;
+  width: 100px;
+  text-align: center;
+  font-size: 1.2em;
 }
 
+/* Сами барабаны */
 .slots {
   display: flex;
   justify-content: center;
+  align-items: center;
+  margin: 20px 0;
   gap: 15px;
-  margin: 20px;
 }
 
 .slot {
@@ -93,160 +97,185 @@ body {
   justify-content: center;
   align-items: center;
   box-shadow: 0 0 10px gold;
+  transition: transform 0.3s;
 }
 
-/* Кнопка Старт */
+/* Кнопка СТАРТ */
 #spinButton {
   background: gold;
-  color: black;
-  padding: 15px 40px;
-  font-size: 1.5em;
   border: none;
+  padding: 15px 30px;
+  font-size: 1.5em;
   border-radius: 15px;
+  color: black;
   cursor: pointer;
-  margin-top: 20px;
   transition: 0.3s;
   animation: blink 2s infinite;
 }
 
-#spinButton:disabled {
-  background: grey;
-  cursor: not-allowed;
-  animation: none;
+#spinButton:hover {
+  background: #ffcc00;
+  box-shadow: 0 0 10px gold;
 }
 
-@keyframes blink {
-  0%, 100% {opacity: 1;}
-  50% {opacity: 0.6;}
-}
-
-/* Секции бонуси, VIP клуб, турнір, новини */
-section {
-  margin: 40px auto;
-  padding: 20px;
-  background: rgba(255, 215, 0, 0.1);
-  border-radius: 20px;
-  width: 90%;
-  max-width: 1000px;
-  text-align: center;
-  animation: fadeIn 1s ease-out;
-}
-
-h2 {
-  color: gold;
-  font-size: 2em;
-  margin-bottom: 20px;
-}
-
-.vip-level, .news-item, .player-card {
-  margin: 10px 0;
-  font-size: 1.2em;
-}
-
-/* Турнирная таблица */
-.tournament-table {
-  width: 100%;
-  border-collapse: collapse;
+/* Кнопки управления */
+.auth-buttons {
   margin-top: 20px;
-}
-
-.tournament-table th, .tournament-table td {
-  padding: 10px;
-  border: 1px solid gold;
-  text-align: center;
-}
-
-/* Стрічка новин */
-.news-item {
-  background: rgba(255, 215, 0, 0.2);
-  padding: 10px;
-  border-radius: 10px;
-}
-
-/* Кращі гравці */
-.player-list {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 15px;
 }
 
-.player-card {
-  background: rgba(255, 215, 0, 0.2);
-  padding: 15px;
-  border-radius: 15px;
-  width: 200px;
-  box-shadow: 0 0 10px gold;
+.auth-buttons button {
+  background: #3498db;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1em;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
-/* Модалки */
+.auth-buttons button:hover {
+  background: #2980b9;
+}
+
+/* Секции */
+section {
+  padding: 50px 20px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.6);
+  margin: 30px 0;
+  border-radius: 20px;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+section h2 {
+  font-size: 2em;
+  margin-bottom: 20px;
+  color: gold;
+}
+
+.promotion-item {
+  margin: 10px 0;
+  font-size: 1.2em;
+}
+
+.faq-item {
+  margin: 20px 0;
+}
+
+/* Модальные окна */
 .modal {
   display: none;
   position: fixed;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
+  top: 0;
+  left: 0;
   background: rgba(0,0,0,0.8);
   backdrop-filter: blur(5px);
+  width: 100%;
+  height: 100%;
   justify-content: center;
   align-items: center;
-  z-index: 9999;
+  z-index: 10000;
 }
 
 .modal-content {
-  background: #1a1a1a;
+  background: #1c1c1c;
   padding: 30px;
   border-radius: 20px;
-  text-align: center;
   width: 90%;
-  max-width: 400px;
+  max-width: 500px;
+  text-align: center;
+  box-shadow: 0 0 20px gold;
 }
 
 .modal-content input {
-  width: 80%;
-  padding: 10px;
   margin: 10px 0;
+  padding: 10px;
+  width: 80%;
+  font-size: 1.1em;
   border-radius: 10px;
   border: none;
 }
 
 .modal-content button {
   margin-top: 15px;
-  background: #ffcc00;
-  border: none;
   padding: 10px 20px;
-  border-radius: 10px;
   font-size: 1em;
+  border-radius: 10px;
+  border: none;
+  background: #3498db;
+  color: white;
   cursor: pointer;
+}
+
+.modal-content button:hover {
+  background: #2980b9;
 }
 
 .copy-button {
   background: gold;
   color: black;
-  border: none;
-  margin-bottom: 10px;
-  padding: 10px;
+  padding: 10px 20px;
+  margin-bottom: 15px;
   border-radius: 10px;
+  cursor: pointer;
+  border: none;
+}
+
+.copy-button:hover {
+  background: #ffcc00;
+}
+
+.close {
+  margin-top: 20px;
+  cursor: pointer;
+  color: gold;
+  font-size: 1.2em;
 }
 
 /* Анимации */
+@keyframes shine {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
 @keyframes fadeIn {
-  from {opacity: 0;}
-  to {opacity: 1;}
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* Адаптив */
 @media (max-width: 600px) {
+  .slot-machine {
+    width: 95%;
+    padding: 20px;
+  }
   .slots {
-    flex-wrap: wrap;
+    gap: 8px;
   }
   .slot {
     width: 60px;
     height: 60px;
     font-size: 2em;
   }
-  .player-list {
+  #spinButton {
+    padding: 12px 20px;
+    font-size: 1.2em;
+  }
+  .auth-buttons {
     flex-direction: column;
-    align-items: center;
+    gap: 10px;
   }
 }

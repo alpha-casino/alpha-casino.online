@@ -17,12 +17,12 @@ music.volume = 0.2;
 
 // Инициализация
 updateBalanceDisplay();
-setupMusicControl();
+setupMusic();
 startJackpotTimer();
 checkZeroBalanceOnLoad();
 
 // Музыка
-function setupMusicControl() {
+function setupMusic() {
   document.addEventListener('click', () => {
     if (!musicPlaying) {
       music.play();
@@ -36,6 +36,19 @@ function setupMusicControl() {
       musicPlaying = true;
     }
   }, { once: true });
+}
+
+function toggleMusic() {
+  const musicButton = document.getElementById('musicButton');
+  if (musicPlaying) {
+    music.pause();
+    musicPlaying = false;
+    musicButton.innerText = '🔇';
+  } else {
+    music.play();
+    musicPlaying = true;
+    musicButton.innerText = '🎵';
+  }
 }
 
 // Баланс
@@ -66,7 +79,7 @@ function enableSpinButton() {
   document.getElementById('spinButton').disabled = false;
 }
 
-// Проверка нулевого баланса
+// Проверка баланса
 function checkZeroBalanceOnLoad() {
   if (balance <= 0) {
     if (!user) {
@@ -204,9 +217,9 @@ function showWinMessage(amount) {
   msg.style.background = '#4caf50';
   msg.style.padding = '20px 40px';
   msg.style.borderRadius = '20px';
-  msg.style.color: '#fff';
-  msg.style.fontSize: '2em';
-  msg.style.zIndex: '999';
+  msg.style.color = '#fff';
+  msg.style.fontSize = '2em';
+  msg.style.zIndex = '999';
   msg.innerText = `Вітаємо! Ви виграли ${amount} грн!`;
   document.body.appendChild(msg);
   setTimeout(() => document.body.removeChild(msg), 3000);

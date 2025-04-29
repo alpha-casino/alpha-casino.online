@@ -253,7 +253,8 @@ function startJackpotTimer() {
 // 🎰 Альфа Казино — ПОЛНЫЙ ФИНАЛЬНЫЙ JAVASCRIPT С BIG WIN И ВСЕЙ ИГРОВОЙ ЛОГИКОЙ
 
 // Переменные
-let balance = user ? user.balance : 0; // Баланс по умолчанию 0 после регистрации
+let user = JSON.parse(localStorage.getItem('casinoUser')) || null;
+balance = user ? user.balance : 0; // Баланс по умолчанию 0 после регистрации
 let musicPlaying = false;
 let music = document.getElementById('bgMusic');
 

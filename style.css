@@ -195,6 +195,23 @@ h1.main-title {
   background: #3498db;
 }
 
+/* Игровое меню */
+.games-menu {
+  padding: 40px 20px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 20px;
+  box-shadow: 0 0 20px gold;
+  width: 90%;
+  margin: 40px auto;
+  text-align: center;
+}
+
+.games-menu h2 {
+  color: gold;
+  font-size: 2em;
+  margin-bottom: 15px;
+}
+
 /* Бонусы */
 section {
   padding: 60px 20px;

@@ -55,6 +55,18 @@
     <button onclick="logout()">🚪 Вийти</button>
   </div>
 
+  <section class="games-menu">
+    <h2>🎮 Ігри Казино</h2>
+    <div class="auth-buttons">
+      <button onclick="openGame('baccarat')">Баккара</button>
+      <button onclick="openGame('blackjack')">Блэкджек</button>
+      <button onclick="openGame('craps')">Крэпс</button>
+      <button onclick="openGame('roulette')">Рулетка</button>
+      <button onclick="openGame('poker')">Покер</button>
+      <button onclick="openGame('wheel')">Колесо Фортуни</button>
+    </div>
+  </section>
+
   <section class="promotions">
     <h2>Акції та бонуси 🎁</h2>
     <div class="promotion-list">
@@ -69,6 +81,7 @@
     <p>Грай у найкращі ігри та вигравай реальні гроші кожного дня!</p>
   </section>
 
+  <!-- Модалки -->
   <div id="paymentModal" class="modal">
     <div class="modal-content">
       <h2>Поповнення USDT</h2>
@@ -128,6 +141,14 @@
       <p id="profileEmailDisplay"></p>
       <p id="profileWalletDisplay"></p>
       <p id="profileBalanceDisplay"></p>
+      <div class="close" onclick="closeModal()">Закрити</div>
+    </div>
+  </div>
+
+  <div id="gameModal" class="modal">
+    <div class="modal-content">
+      <h2 id="gameTitle">Гра</h2>
+      <p id="gameContent">Тут буде гра.</p>
       <div class="close" onclick="closeModal()">Закрити</div>
     </div>
   </div>

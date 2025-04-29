@@ -1,8 +1,7 @@
-// 🎰 Альфа Казино — ПОЛНЫЙ ФИНАЛЬНЫЙ JAVASCRIPT С BIG WIN И ВСЕЙ ИГРОВОЙ ЛОГИКОЙ
+// 🎰 Альфа Казино — ОБНОВЛЕННЫЙ SCRIPT С ХРАНЕНИЕМ НЕСКОЛЬКИХ ПОЛЬЗОВАТЕЛЕЙ
 
-// Переменные
-let user = JSON.parse(localStorage.getItem('casinoUser')) || null;
-let balance = user ? user.balance : 500;
+let currentUser = JSON.parse(localStorage.getItem('casinoCurrentUser')) || null;
+let balance = currentUser ? currentUser.balance : 500;
 let musicPlaying = false;
 let music = document.getElementById('bgMusic');
 
@@ -35,7 +34,7 @@ function startupCheck() {
   updateUserInfo();
   setupMusicControl();
   startJackpotTimer();
-  if (user) {
+  if (currentUser) {
     document.getElementById('headerButtons').style.display = 'none';
     document.getElementById('authButtons').style.display = 'flex';
   } else if (balance <= 0) {
@@ -58,16 +57,20 @@ function setupMusicControl() {
 }
 
 function updateUserInfo() {
-  if (user) {
-    document.getElementById('user-info').innerText = `Вітаємо, ${user.name}!`;
+  if (currentUser) {
+    document.getElementById('user-info').innerText = `Вітаємо, ${currentUser.name}!`;
   }
 }
 
 function updateBalanceDisplay() {
   document.getElementById('balance').innerText = balance;
-  if (user) {
-    user.balance = balance;
-    localStorage.setItem('casinoUser', JSON.stringify(user));
+  if (currentUser) {
+    currentUser.balance = balance;
+    localStorage.setItem('casinoCurrentUser', JSON.stringify(currentUser));
+
+    let users = JSON.parse(localStorage.getItem('casinoUsers')) || [];
+    users = users.map(u => u.email === currentUser.email ? currentUser : u);
+    localStorage.setItem('casinoUsers', JSON.stringify(users));
   } else {
     localStorage.setItem('casinoBalance', balance);
   }
@@ -180,24 +183,40 @@ function completeRegistration() {
   const password = document.getElementById('profilePassword').value;
   const wallet = document.getElementById('walletAddress').value;
   if (!name || !email || !password || !wallet) return alert('Заповніть всі поля!');
-  user = { name, email, password, wallet, balance };
-  localStorage.setItem('casinoUser', JSON.stringify(user));
+
+  let users = JSON.parse(localStorage.getItem('casinoUsers')) || [];
+
+  if (users.some(u => u.email === email)) {
+    return alert('Користувач з таким email вже існує!');
+  }
+
+  const newUser = { name, email, password, wallet, balance: 600 };
+  users.push(newUser);
+  localStorage.setItem('casinoUsers', JSON.stringify(users));
+  localStorage.setItem('casinoCurrentUser', JSON.stringify(newUser));
+
+  currentUser = newUser;
+  balance = 600;
+
   document.getElementById('headerButtons').style.display = 'none';
   document.getElementById('authButtons').style.display = 'flex';
   updateUserInfo();
   closeModal();
   alert('Реєстрація успішна! Вам нараховано бонус 100 грн.');
-  balance += 100;
   updateBalanceDisplay();
 }
 
 function login() {
   const email = document.getElementById('loginEmail').value;
   const password = document.getElementById('loginPassword').value;
-  const saved = JSON.parse(localStorage.getItem('casinoUser'));
-  if (saved && saved.email === email && saved.password === password) {
-    user = saved;
-    balance = user.balance;
+  const users = JSON.parse(localStorage.getItem('casinoUsers')) || [];
+
+  const found = users.find(u => u.email === email && u.password === password);
+
+  if (found) {
+    currentUser = found;
+    balance = found.balance;
+    localStorage.setItem('casinoCurrentUser', JSON.stringify(currentUser));
     updateBalanceDisplay();
     document.getElementById('headerButtons').style.display = 'none';
     document.getElementById('authButtons').style.display = 'flex';
@@ -209,8 +228,8 @@ function login() {
 }
 
 function logout() {
-  user = null;
-  localStorage.removeItem('casinoUser');
+  currentUser = null;
+  localStorage.removeItem('casinoCurrentUser');
   balance = 500;
   updateBalanceDisplay();
   document.getElementById('headerButtons').style.display = 'flex';
@@ -220,10 +239,10 @@ function logout() {
 }
 
 function openProfile() {
-  if (!user) return;
-  document.getElementById('profileNameDisplay').innerText = `Нікнейм: ${user.name}`;
-  document.getElementById('profileEmailDisplay').innerText = `Email: ${user.email}`;
-  document.getElementById('profileWalletDisplay').innerText = `Гаманець: ${user.wallet}`;
+  if (!currentUser) return;
+  document.getElementById('profileNameDisplay').innerText = `Нікнейм: ${currentUser.name}`;
+  document.getElementById('profileEmailDisplay').innerText = `Email: ${currentUser.email}`;
+  document.getElementById('profileWalletDisplay').innerText = `Гаманець: ${currentUser.wallet}`;
   document.getElementById('profileBalanceDisplay').innerText = `Баланс: ${balance} грн`;
   document.getElementById('profileModal').style.display = 'flex';
 }
@@ -293,4 +312,189 @@ function startJackpotTimer() {
     }
     document.getElementById('jackpotTimer').innerText = `Джекпот через: ${min}:${sec < 10 ? '0' : ''}${sec}`;
   }, 1000);
+}
+
+function openGame(game) {
+  const titles = {
+    baccarat: "Баккара",
+    blackjack: "Блэкджек",
+    craps: "Крэпс",
+    roulette: "Рулетка",
+    poker: "Покер",
+    wheel: "Колесо Фортуни"
+  };
+
+  document.getElementById('gameTitle').innerText = titles[game] || "Гра";
+  document.getElementById('gameContent').innerHTML = `
+    <p><em>${titles[game]} в розробці.</em></p>
+    <p>Незабаром буде доступна повноцінна версія гри ${titles[game].toUpperCase()} 🎲</p>
+  `;
+  document.getElementById('gameModal').style.display = 'flex';
+}
+// =============== ГРИ =============== //
+
+function openGame(game) {
+  const modal = document.getElementById('gameModal');
+  const titleEl = document.getElementById('gameTitle');
+  const contentEl = document.getElementById('gameContent');
+
+  const gameData = {
+    baccarat: {
+      title: "Баккара",
+      html: `
+        <p>Ваша ставка: <input type="number" id="baccarat-bet" value="100"> грн</p>
+        <button onclick="startBaccarat()">Роздати карти</button>
+        <div id="baccarat-result"></div>
+      `
+    },
+    blackjack: {
+      title: "Блэкджек",
+      html: `
+        <p>Ваші карти: <span id="playerCards"></span></p>
+        <p>Сума: <span id="playerSum"></span></p>
+        <p>Карти дилера: <span id="dealerCards"></span></p>
+        <p>Сума дилера: <span id="dealerSum"></span></p>
+        <button onclick="hit()">Взяти</button>
+        <button onclick="stand()">Зупинитись</button>
+        <div id="blackjackResult"></div>
+      `
+    },
+    craps: {
+      title: "Крэпс",
+      html: `
+        <button onclick="rollCraps()">Кинути кубики</button>
+        <p>Результат: <span id="crapsResult">-</span></p>
+      `
+    },
+    roulette: {
+      title: "Рулетка",
+      html: `
+        <p>Обирайте: <button onclick="spinRoulette('red')">Червоне</button>
+        <button onclick="spinRoulette('black')">Чорне</button></p>
+        <p>Випало: <span id="rouletteResult">-</span></p>
+      `
+    },
+    poker: {
+      title: "Покер",
+      html: `
+        <p>Ваші карти: <span id="pokerCards"></span></p>
+        <button onclick="dealPoker()">Роздати</button>
+      `
+    },
+    wheel: {
+      title: "Колесо Фортуни",
+      html: `
+        <button onclick="spinWheel()">Обертати колесо</button>
+        <p>Випало: <span id="wheelResult">-</span></p>
+      `
+    }
+  };
+
+  const data = gameData[game];
+  if (data) {
+    titleEl.innerText = data.title;
+    contentEl.innerHTML = data.html;
+    modal.style.display = 'flex';
+    if (game === 'blackjack') initBlackjack();
+  }
+}
+
+// === БАККАРА ===
+function startBaccarat() {
+  const player = Math.floor(Math.random() * 10 + 1);
+  const banker = Math.floor(Math.random() * 10 + 1);
+  let result = `Гравець: ${player}, Банкір: ${banker} — `;
+  if (player > banker) result += "Перемога гравця!";
+  else if (banker > player) result += "Перемога банкіра!";
+  else result += "Нічия!";
+  document.getElementById('baccarat-result').innerText = result;
+}
+
+// === БЛЭКДЖЕК ===
+let blackjackPlayer = [], blackjackDealer = [];
+function initBlackjack() {
+  blackjackPlayer = [drawCard(), drawCard()];
+  blackjackDealer = [drawCard()];
+  updateBlackjackDisplay();
+}
+function drawCard() {
+  const ranks = ['2','3','4','5','6','7','8','9','10','J','Q','K','A'];
+  const card = ranks[Math.floor(Math.random() * ranks.length)];
+  return card;
+}
+function calculateSum(cards) {
+  let sum = 0, aces = 0;
+  for (let c of cards) {
+    if (['J','Q','K'].includes(c)) sum += 10;
+    else if (c === 'A') { sum += 11; aces++; }
+    else sum += parseInt(c);
+  }
+  while (sum > 21 && aces > 0) { sum -= 10; aces--; }
+  return sum;
+}
+function updateBlackjackDisplay() {
+  document.getElementById('playerCards').innerText = blackjackPlayer.join(', ');
+  document.getElementById('dealerCards').innerText = blackjackDealer.join(', ');
+  document.getElementById('playerSum').innerText = calculateSum(blackjackPlayer);
+  document.getElementById('dealerSum').innerText = calculateSum(blackjackDealer);
+}
+function hit() {
+  blackjackPlayer.push(drawCard());
+  updateBlackjackDisplay();
+  if (calculateSum(blackjackPlayer) > 21) {
+    document.getElementById('blackjackResult').innerText = "Перебір! Ви програли.";
+  }
+}
+function stand() {
+  while (calculateSum(blackjackDealer) < 17) {
+    blackjackDealer.push(drawCard());
+  }
+  updateBlackjackDisplay();
+  const playerSum = calculateSum(blackjackPlayer);
+  const dealerSum = calculateSum(blackjackDealer);
+  let result;
+  if (playerSum > 21) result = "Ви програли!";
+  else if (dealerSum > 21 || playerSum > dealerSum) result = "Ви виграли!";
+  else if (playerSum < dealerSum) result = "Ви програли!";
+  else result = "Нічия!";
+  document.getElementById('blackjackResult').innerText = result;
+}
+
+// === КРЭПС ===
+function rollCraps() {
+  const die1 = Math.floor(Math.random()*6)+1;
+  const die2 = Math.floor(Math.random()*6)+1;
+  const total = die1 + die2;
+  let result = `🎲 ${die1} + ${die2} = ${total} — `;
+  if ([7,11].includes(total)) result += "Перемога!";
+  else if ([2,3,12].includes(total)) result += "Програш!";
+  else result += "Повторіть спробу.";
+  document.getElementById('crapsResult').innerText = result;
+}
+
+// === РУЛЕТКА ===
+function spinRoulette(choice) {
+  const num = Math.floor(Math.random()*36)+1;
+  const color = (num % 2 === 0) ? 'black' : 'red';
+  const win = (choice === color);
+  document.getElementById('rouletteResult').innerText = `${num} (${color}) — ${win ? 'Ви виграли!' : 'Програш'}`;
+}
+
+// === ПОКЕР ===
+function dealPoker() {
+  const suits = ['♠','♥','♦','♣'];
+  const ranks = ['2','3','4','5','6','7','8','9','10','J','Q','K','A'];
+  let hand = [];
+  while (hand.length < 5) {
+    const card = ranks[Math.floor(Math.random()*ranks.length)] + suits[Math.floor(Math.random()*suits.length)];
+    if (!hand.includes(card)) hand.push(card);
+  }
+  document.getElementById('pokerCards').innerText = hand.join(', ');
+}
+
+// === КОЛЕСО ФОРТУНИ ===
+function spinWheel() {
+  const sectors = ['100', '200', '0', 'x2', '500', '0', 'x3', '1000'];
+  const result = sectors[Math.floor(Math.random()*sectors.length)];
+  document.getElementById('wheelResult').innerText = `Ви виграли: ${result}`;
 }

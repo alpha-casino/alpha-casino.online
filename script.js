@@ -1,3 +1,4 @@
+
 // 🎰 Альфа Казино — ПОЛНЫЙ ФИНАЛЬНЫЙ JAVASCRIPT С BIG WIN И ВСЕЙ ИГРОВОЙ ЛОГИКОЙ
 
 // Переменные
@@ -78,6 +79,7 @@ function updateBetDisplay() {
   document.getElementById('betDisplay').innerText = bet;
 }
 
+// Модифицированная функция для спина с увеличенной вероятностью выигрыша
 function startSpin() {
   const bet = parseInt(document.getElementById('betAmount').value);
   if (balance < bet) return alert('Недостатньо коштів!');
@@ -112,6 +114,7 @@ function startSpin() {
   });
 }
 
+// Функция для проверки выигрыша с улучшенной логикой
 function checkWin(results, bet) {
   const win = results.every(symbol => symbol === results[0]);
   if (win) {
